@@ -1,0 +1,164 @@
+/* 通用 */
+"app.title" = "云简";
+"app.menu.about" = "关于%@";
+"common.new" = "新建";
+"common.delete" = "删除";
+"common.save" = "保存";
+"common.cancel" = "取消";
+"common.ok" = "好";
+
+/* 图片上传 */
+"imageUpload.hint" = "选择一张图片，云简会拷贝到附件目录并插入 Markdown 图片链接。";
+"imageUpload.insert" = "选择图片并插入…";
+"imageUpload.unavailable" = "此功能在当前平台不可用。";
+
+/* 文库 */
+"library.selectDocument" = "请选择一篇文档";
+"library.untitled" = "未命名";
+
+/* 主页 */
+"home.subtitle" = "从左侧打开最近文件，或选择一篇文档";
+
+/* 侧栏 */
+"sidebar.recentFiles" = "最近打开";
+"sidebar.documents" = "文档";
+
+/* 关闭确认 */
+"closeConfirm.title" = "是否保存更改？";
+"closeConfirm.message" = "当前文档有未保存的更改。";
+"closeConfirm.dontSave" = "不保存";
+
+/* 编辑器 */
+"editor.titlePlaceholder" = "标题";
+
+/* 同步 / 协同 */
+"sync.menu.title" = "同步";
+"sync.menu.syncNow" = "立即同步";
+"sync.state.idle" = "空闲";
+"sync.state.syncing" = "同步中…";
+"sync.state.error" = "同步错误";
+
+"collab.menu.title" = "协同";
+"collab.menu.join" = "加入协同";
+"collab.menu.leave" = "退出协同";
+"collab.menu.unavailable" = "不可用";
+"collab.state.joined" = "已加入";
+"collab.state.notJoined" = "未加入";
+
+/* 文档菜单 */
+"doc.menu.title" = "文档";
+"doc.menu.openRecent" = "最近打开";
+"doc.menu.noRecent" = "没有最近文档";
+"doc.menu.status" = "状态：%@";
+
+/* 文件 */
+"file.open" = "打开…";
+"file.openRecent" = "打开最近文件…";
+"file.clearRecent" = "清除菜单";
+"file.saveAs" = "另存为…";
+"file.closeDocument" = "关闭";
+"file.closeWindow" = "关闭当前窗口";
+"file.newWindow" = "新窗口打开";
+"file.revealInFinder" = "在 Finder 中显示";
+"file.pageSetup" = "页面设置";
+"file.print" = "打印";
+
+/* 编辑扩展 */
+"edit.pasteAsPNG" = "粘贴为 PNG";
+"edit.pasteAsPlainText" = "粘贴为纯文本";
+"edit.pasteHTMLAsMarkdown" = "将 HTML 粘贴为 Markdown";
+"edit.insertCNSpace" = "在中文和半角的英文、数字之间插入空格";
+"edit.insertHTMLEntity" = "插入 HTML 实体";
+
+/* 语法 */
+"syntax.menu.title" = "语法";
+"syntax.bold" = "加粗";
+"syntax.italic" = "斜体";
+"syntax.underline" = "下划线";
+"syntax.strikethrough" = "删除线";
+"syntax.link" = "链接";
+"syntax.imageSyntax" = "插入图片语法";
+"syntax.insertFile" = "插入图片或文件…";
+"syntax.table" = "表格";
+"syntax.ul" = "无序列表";
+"syntax.ol" = "有序列表";
+"syntax.task" = "任务列表";
+"syntax.quote" = "引用";
+"syntax.inlineCode" = "行内代码";
+"syntax.codeBlock" = "代码块";
+"syntax.inlineMath" = "行内数学公式";
+"syntax.mathBlock" = "数学公式块";
+"syntax.hr" = "行分隔符";
+"syntax.htmlComment" = "HTML 注释";
+"syntax.heading" = "标题";
+"syntax.headingN" = "标题 %d";
+"syntax.indent" = "向右缩进";
+"syntax.outdent" = "向左缩进";
+"syntax.newParagraph" = "新段落";
+"syntax.insertDate" = "插入当前日期";
+"syntax.insertTime" = "插入当前时间";
+
+/* 视图 */
+"view.showDocLocation" = "在导航目录中显示当前文档位置";
+"view.editorOnly" = "仅显示编辑器";
+"view.twoColumn" = "双栏视图模式";
+"view.threeColumn" = "三栏视图模式";
+"view.togglePreviewEditor" = "切换预览 / 编辑器";
+"view.toggleEditPreview" = "切换边编辑边预览";
+"view.focusMode" = "专注模式";
+"view.outline" = "大纲视图";
+"view.imageUploadWindow" = "图片上传窗口";
+"view.documentAttributes" = "文档属性设置";
+"view.windowAlwaysOnTop" = "窗口浮动在最前面";
+"view.customizeToolbar" = "自定义工具条…";
+"view.toggleToolbar" = "显示 / 隐藏工具条";
+"view.toggleTabBar" = "显示 / 隐藏标签条";
+"view.resetFont" = "重置字体大小";
+"view.increaseFont" = "增大字体";
+"view.decreaseFont" = "减小字体";
+"view.prevTab" = "转到上一个标签";
+"view.nextTab" = "转到下一个标签";
+"view.highlightCurrentLine" = "改变当前行背景颜色";
+"view.darkMode" = "黑暗模式";
+"view.listStyle" = "列表样式";
+"view.listStyle.default" = "默认";
+"view.listStyle.compact" = "紧凑";
+"view.enterFullScreen" = "进入全屏幕";
+"view.openLibraryMode" = "打开文档库模式";
+"view.openFolderMode" = "打开文件夹模式";
+
+/* 发布 */
+"publish.menu.title" = "发布";
+"publish.copyHTML" = "复制 HTML";
+"publish.copyRichText" = "复制为富文本";
+"publish.exportOrCopyImage" = "导出或复制为图片…";
+"publish.exportTextbundle" = "导出为 Textbundle…";
+"publish.exportPDF" = "导出为 PDF…";
+"publish.exportHTML" = "导出为 HTML…";
+"publish.exportMarkdown" = "导出为 Markdown…";
+"publish.exportEpub" = "导出为 Epub…";
+"publish.exportRTF" = "导出为 RTF…";
+"publish.exportDocx" = "导出为 Docx…";
+"publish.uploadImages" = "把本地图片传至图床…";
+"publish.setupWordpressEvernote" = "设置发布到 Wordpress, Evernote…";
+
+/* 帮助 */
+"help.userDocs" = "使用文档";
+"help.markdownSyntax" = "Markdown 语法…";
+"help.sendFeedback" = "发送建议…";
+
+/* 推广 */
+"help.autoblog" = "了解 AutoBlog…";
+
+/* 菜单栏 */
+"menubar.syncState" = "同步：%@";
+
+/* 文档属性 */
+"doc.attr.title" = "标题";
+"doc.attr.location" = "位置";
+"doc.attr.notSaved" = "未保存";
+"doc.attr.createdAt" = "创建时间";
+"doc.attr.updatedAt" = "更新时间";
+"doc.attr.characters" = "字符数";
+"doc.attr.words" = "词数";
+"doc.attr.lines" = "行数";

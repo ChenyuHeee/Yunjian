@@ -1,0 +1,515 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		0F4F1A0E65AABC8B479D6CD8 /* YunjianApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 281B024E20C18309D99AE9B5 /* YunjianApp.swift */; };
+		21A85E10D0FA30D3BD911BCF /* YunjianCore in Frameworks */ = {isa = PBXBuildFile; productRef = 088356E8EB1C3438C2A4CF3B /* YunjianCore */; };
+		2E7E02034199442C6F7A4F70 /* SyncEngine in Frameworks */ = {isa = PBXBuildFile; productRef = E74786B89D6E93FB4C1F81FD /* SyncEngine */; };
+		627E16126FAB1E6EDE59298E /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 35678ED17CB415616C7EE5E6 /* Localizable.strings */; };
+		72C202F64910640EC3E30CB7 /* YunjianCore in Frameworks */ = {isa = PBXBuildFile; productRef = 6B12002E99A62B612DCF45E5 /* YunjianCore */; };
+		93A53104D45F022CDA8A20FE /* YunjianApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 281B024E20C18309D99AE9B5 /* YunjianApp.swift */; };
+		9966D70222F63D2DB4D09867 /* EditorEngine in Frameworks */ = {isa = PBXBuildFile; productRef = 70A527AFE2CABF510FFDBDF0 /* EditorEngine */; };
+		B65EB98CF9F5A4B103EF69BD /* EditorEngine in Frameworks */ = {isa = PBXBuildFile; productRef = A2D6859190DEEA1FB191A51D /* EditorEngine */; };
+		C76D8182459A25A7C0406485 /* StorageService in Frameworks */ = {isa = PBXBuildFile; productRef = 98C167CF260FD6B48181D74E /* StorageService */; };
+		D804129C0F79EE0F83294453 /* SyncEngine in Frameworks */ = {isa = PBXBuildFile; productRef = DAD9A3748F4AB60FA0B54152 /* SyncEngine */; };
+		D9826915C0BDF609D6B4229E /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 35678ED17CB415616C7EE5E6 /* Localizable.strings */; };
+		E6C1592815E2B546FB649D76 /* StorageService in Frameworks */ = {isa = PBXBuildFile; productRef = 1E611382BC457252B6FFDD2B /* StorageService */; };
+		EF139EBDD2DB0D2493F4CFCD /* UIComponents in Frameworks */ = {isa = PBXBuildFile; productRef = F8A72D0F2B75A28568764D13 /* UIComponents */; };
+		F423AF4C47E21D54BC03D0D2 /* UIComponents in Frameworks */ = {isa = PBXBuildFile; productRef = A0052D49380DB1ED7C89C3E9 /* UIComponents */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		1BB7F38E9DDAA5A3B8080189 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/Localizable.strings"; sourceTree = "<group>"; };
+		281B024E20C18309D99AE9B5 /* YunjianApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YunjianApp.swift; sourceTree = "<group>"; };
+		62D30EA3A2157A162E7A19A5 /* YunjianApp-macOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "YunjianApp-macOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		7E7167A6518DE4192097BCA9 /* Yunjian */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Yunjian; path = .; sourceTree = SOURCE_ROOT; };
+		A869B72DDDEFF839D8AE944D /* YunjianApp.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = YunjianApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		C33909DDB969AA4C519FEBF6 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
+		DA0DC2DA1F5B1E1767266766 /* zh-Hans-CN */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans-CN"; path = "zh-Hans-CN.lproj/Localizable.strings"; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		21CE0301E2970A02132B069A /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				EF139EBDD2DB0D2493F4CFCD /* UIComponents in Frameworks */,
+				C76D8182459A25A7C0406485 /* StorageService in Frameworks */,
+				2E7E02034199442C6F7A4F70 /* SyncEngine in Frameworks */,
+				B65EB98CF9F5A4B103EF69BD /* EditorEngine in Frameworks */,
+				72C202F64910640EC3E30CB7 /* YunjianCore in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B1F5341E5C156242D34AF2FD /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				F423AF4C47E21D54BC03D0D2 /* UIComponents in Frameworks */,
+				E6C1592815E2B546FB649D76 /* StorageService in Frameworks */,
+				D804129C0F79EE0F83294453 /* SyncEngine in Frameworks */,
+				9966D70222F63D2DB4D09867 /* EditorEngine in Frameworks */,
+				21A85E10D0FA30D3BD911BCF /* YunjianCore in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		4D0FE25CC868FFF7F3B7AE9D /* Packages */ = {
+			isa = PBXGroup;
+			children = (
+				7E7167A6518DE4192097BCA9 /* Yunjian */,
+			);
+			name = Packages;
+			sourceTree = "<group>";
+		};
+		5BE8203892414EA6FBCA3172 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				62D30EA3A2157A162E7A19A5 /* YunjianApp-macOS.app */,
+				A869B72DDDEFF839D8AE944D /* YunjianApp.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		6203AE2D0A2AA8ACA2CD3864 = {
+			isa = PBXGroup;
+			children = (
+				4D0FE25CC868FFF7F3B7AE9D /* Packages */,
+				BFABDFAF7036C48A6C94EB8E /* YunjianApp */,
+				5BE8203892414EA6FBCA3172 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		8BADB148B2C36E3EA4A12BA8 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				35678ED17CB415616C7EE5E6 /* Localizable.strings */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		BFABDFAF7036C48A6C94EB8E /* YunjianApp */ = {
+			isa = PBXGroup;
+			children = (
+				281B024E20C18309D99AE9B5 /* YunjianApp.swift */,
+				8BADB148B2C36E3EA4A12BA8 /* Resources */,
+			);
+			name = YunjianApp;
+			path = Apps/YunjianApp;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		20EE60EF272CA849DD0041F2 /* YunjianApp-macOS */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = E13D506E0022149F770F1B2B /* Build configuration list for PBXNativeTarget "YunjianApp-macOS" */;
+			buildPhases = (
+				D017432CF49F6127D937A844 /* Sources */,
+				1461D59D2BC18C704E97A1F1 /* Resources */,
+				21CE0301E2970A02132B069A /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "YunjianApp-macOS";
+			packageProductDependencies = (
+				F8A72D0F2B75A28568764D13 /* UIComponents */,
+				98C167CF260FD6B48181D74E /* StorageService */,
+				E74786B89D6E93FB4C1F81FD /* SyncEngine */,
+				A2D6859190DEEA1FB191A51D /* EditorEngine */,
+				6B12002E99A62B612DCF45E5 /* YunjianCore */,
+			);
+			productName = "YunjianApp-macOS";
+			productReference = 62D30EA3A2157A162E7A19A5 /* YunjianApp-macOS.app */;
+			productType = "com.apple.product-type.application";
+		};
+		B927B82BEF723D6B6D509013 /* YunjianApp */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = C0FC39FEFE882B72371CC03F /* Build configuration list for PBXNativeTarget "YunjianApp" */;
+			buildPhases = (
+				517C41B3B772E76D7CEACB0C /* Sources */,
+				8904B3D6E7BB808DB145FF9D /* Resources */,
+				B1F5341E5C156242D34AF2FD /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = YunjianApp;
+			packageProductDependencies = (
+				A0052D49380DB1ED7C89C3E9 /* UIComponents */,
+				1E611382BC457252B6FFDD2B /* StorageService */,
+				DAD9A3748F4AB60FA0B54152 /* SyncEngine */,
+				70A527AFE2CABF510FFDBDF0 /* EditorEngine */,
+				088356E8EB1C3438C2A4CF3B /* YunjianCore */,
+			);
+			productName = YunjianApp;
+			productReference = A869B72DDDEFF839D8AE944D /* YunjianApp.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		FD57EE3A2FDB62A1B5F72F59 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = YES;
+				LastUpgradeCheck = 1430;
+			};
+			buildConfigurationList = EB6A8E8FE58C204FB884962B /* Build configuration list for PBXProject "Yunjian" */;
+			compatibilityVersion = "Xcode 14.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				Base,
+				en,
+				"zh-Hans",
+				"zh-Hans-CN",
+			);
+			mainGroup = 6203AE2D0A2AA8ACA2CD3864;
+			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				05BC394B612E6CB7E1301B58 /* XCLocalSwiftPackageReference "." */,
+			);
+			preferredProjectObjectVersion = 77;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				B927B82BEF723D6B6D509013 /* YunjianApp */,
+				20EE60EF272CA849DD0041F2 /* YunjianApp-macOS */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		1461D59D2BC18C704E97A1F1 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				627E16126FAB1E6EDE59298E /* Localizable.strings in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		8904B3D6E7BB808DB145FF9D /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D9826915C0BDF609D6B4229E /* Localizable.strings in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		517C41B3B772E76D7CEACB0C /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				0F4F1A0E65AABC8B479D6CD8 /* YunjianApp.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D017432CF49F6127D937A844 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				93A53104D45F022CDA8A20FE /* YunjianApp.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		35678ED17CB415616C7EE5E6 /* Localizable.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				C33909DDB969AA4C519FEBF6 /* en */,
+				1BB7F38E9DDAA5A3B8080189 /* zh-Hans */,
+				DA0DC2DA1F5B1E1767266766 /* zh-Hans-CN */,
+			);
+			name = Localizable.strings;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		2A1A6D076A3B1141A9376E18 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+		90C31C10C18D4792AD2B5575 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				GENERATE_INFOPLIST_FILE = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.yunjian.YunjianApp;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		95D5CB6BBA14BCBE14795AB6 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"DEBUG=1",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		9D656AF05285305179062F6E /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				GENERATE_INFOPLIST_FILE = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.yunjian.YunjianApp;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		C1D0A6EE5881499B1C18D77D /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				COMBINE_HIDPI_IMAGES = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = "云简";
+				INFOPLIST_KEY_CFBundleName = "云简";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "com.yunjian.YunjianApp-macOS";
+				PRODUCT_NAME = "云简";
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
+		DD23104DE83DA72ECE29FE80 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				COMBINE_HIDPI_IMAGES = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = "云简";
+				INFOPLIST_KEY_CFBundleName = "云简";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "com.yunjian.YunjianApp-macOS";
+				PRODUCT_NAME = "云简";
+				SDKROOT = macosx;
+			};
+			name = Debug;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		C0FC39FEFE882B72371CC03F /* Build configuration list for PBXNativeTarget "YunjianApp" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				9D656AF05285305179062F6E /* Debug */,
+				90C31C10C18D4792AD2B5575 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		E13D506E0022149F770F1B2B /* Build configuration list for PBXNativeTarget "YunjianApp-macOS" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				DD23104DE83DA72ECE29FE80 /* Debug */,
+				C1D0A6EE5881499B1C18D77D /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		EB6A8E8FE58C204FB884962B /* Build configuration list for PBXProject "Yunjian" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				95D5CB6BBA14BCBE14795AB6 /* Debug */,
+				2A1A6D076A3B1141A9376E18 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+/* End XCConfigurationList section */
+
+/* Begin XCLocalSwiftPackageReference section */
+		05BC394B612E6CB7E1301B58 /* XCLocalSwiftPackageReference "." */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = .;
+		};
+/* End XCLocalSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		088356E8EB1C3438C2A4CF3B /* YunjianCore */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = YunjianCore;
+		};
+		1E611382BC457252B6FFDD2B /* StorageService */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = StorageService;
+		};
+		6B12002E99A62B612DCF45E5 /* YunjianCore */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = YunjianCore;
+		};
+		70A527AFE2CABF510FFDBDF0 /* EditorEngine */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = EditorEngine;
+		};
+		98C167CF260FD6B48181D74E /* StorageService */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = StorageService;
+		};
+		A0052D49380DB1ED7C89C3E9 /* UIComponents */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = UIComponents;
+		};
+		A2D6859190DEEA1FB191A51D /* EditorEngine */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = EditorEngine;
+		};
+		DAD9A3748F4AB60FA0B54152 /* SyncEngine */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = SyncEngine;
+		};
+		E74786B89D6E93FB4C1F81FD /* SyncEngine */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = SyncEngine;
+		};
+		F8A72D0F2B75A28568764D13 /* UIComponents */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = UIComponents;
+		};
+/* End XCSwiftPackageProductDependency section */
+	};
+	rootObject = FD57EE3A2FDB62A1B5F72F59 /* Project object */;
+}

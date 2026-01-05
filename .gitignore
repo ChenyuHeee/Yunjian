@@ -1,0 +1,42 @@
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Xcode
+DerivedData/
+*.xcuserstate
+*.xcuserdata/
+*.xccheckout
+*.xcscmblueprint
+*.moved-aside
+*.swp
+*.tmp
+
+# Xcode workspaces (user data)
+*.xcodeproj/project.xcworkspace/xcuserdata/
+*.xcworkspace/xcuserdata/
+
+# Swift Package Manager
+.build/
+.swiftpm/
+Package.resolved
+
+# XcodeGen / local build output used by scripts
+.derivedData/
+
+# Crash logs
+*.crash
+
+# IDEs
+.vscode/
+.idea/
+
+# Fastlane
+fastlane/report.xml
+fastlane/Preview.html
+fastlane/screenshots
+fastlane/test_output
+
+# SwiftPM plugins / build artifacts
+.build-artifacts/

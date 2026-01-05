@@ -1,0 +1,164 @@
+/* General */
+"app.title" = "Yunjian";
+"app.menu.about" = "About %@";
+"common.new" = "New";
+"common.delete" = "Delete";
+"common.save" = "Save";
+"common.cancel" = "Cancel";
+"common.ok" = "OK";
+
+/* Image upload */
+"imageUpload.hint" = "Choose an image. Yunjian will copy it into the attachments folder and insert a Markdown image link.";
+"imageUpload.insert" = "Choose Image and Insert…";
+"imageUpload.unavailable" = "This feature is unavailable on this platform.";
+
+/* Library */
+"library.selectDocument" = "Select a document";
+"library.untitled" = "Untitled";
+
+/* Home */
+"home.subtitle" = "Open a recent file from the sidebar, or select a document";
+
+/* Sidebar */
+"sidebar.recentFiles" = "Recent";
+"sidebar.documents" = "Documents";
+
+/* Close confirmation */
+"closeConfirm.title" = "Save changes?";
+"closeConfirm.message" = "This document has unsaved changes.";
+"closeConfirm.dontSave" = "Don't Save";
+
+/* Editor */
+"editor.titlePlaceholder" = "Title";
+
+/* Sync / Collaboration */
+"sync.menu.title" = "Sync";
+"sync.menu.syncNow" = "Sync Now";
+"sync.state.idle" = "Idle";
+"sync.state.syncing" = "Syncing…";
+"sync.state.error" = "Sync Error";
+
+"collab.menu.title" = "Collaboration";
+"collab.menu.join" = "Join";
+"collab.menu.leave" = "Leave";
+"collab.menu.unavailable" = "Unavailable";
+"collab.state.joined" = "Joined";
+"collab.state.notJoined" = "Not Joined";
+
+/* Document menu */
+"doc.menu.title" = "Document";
+"doc.menu.openRecent" = "Open Recent";
+"doc.menu.noRecent" = "No Recent Documents";
+"doc.menu.status" = "Status: %@";
+
+/* File */
+"file.open" = "Open…";
+"file.openRecent" = "Open Recent";
+"file.clearRecent" = "Clear Menu";
+"file.saveAs" = "Save As…";
+"file.closeDocument" = "Close";
+"file.closeWindow" = "Close Window";
+"file.newWindow" = "New Window";
+"file.revealInFinder" = "Reveal in Finder";
+"file.pageSetup" = "Page Setup…";
+"file.print" = "Print…";
+
+/* Edit extras */
+"edit.pasteAsPNG" = "Paste as PNG";
+"edit.pasteAsPlainText" = "Paste as Plain Text";
+"edit.pasteHTMLAsMarkdown" = "Paste HTML as Markdown";
+"edit.insertCNSpace" = "Insert spaces between Chinese and Latin";
+"edit.insertHTMLEntity" = "Insert HTML entity";
+
+/* Syntax */
+"syntax.menu.title" = "Syntax";
+"syntax.bold" = "Bold";
+"syntax.italic" = "Italic";
+"syntax.underline" = "Underline";
+"syntax.strikethrough" = "Strikethrough";
+"syntax.link" = "Link";
+"syntax.imageSyntax" = "Insert Image Syntax";
+"syntax.insertFile" = "Insert Image or File…";
+"syntax.table" = "Table";
+"syntax.ul" = "Unordered List";
+"syntax.ol" = "Ordered List";
+"syntax.task" = "Task List";
+"syntax.quote" = "Quote";
+"syntax.inlineCode" = "Inline Code";
+"syntax.codeBlock" = "Code Block";
+"syntax.inlineMath" = "Inline Math";
+"syntax.mathBlock" = "Math Block";
+"syntax.hr" = "Horizontal Rule";
+"syntax.htmlComment" = "HTML Comment";
+"syntax.heading" = "Heading";
+"syntax.headingN" = "Heading %d";
+"syntax.indent" = "Indent";
+"syntax.outdent" = "Outdent";
+"syntax.newParagraph" = "New Paragraph";
+"syntax.insertDate" = "Insert Current Date";
+"syntax.insertTime" = "Insert Current Time";
+
+/* View */
+"view.showDocLocation" = "Show current document location in navigation";
+"view.editorOnly" = "Editor Only";
+"view.twoColumn" = "Two-column View";
+"view.threeColumn" = "Three-column View";
+"view.togglePreviewEditor" = "Toggle Preview / Editor";
+"view.toggleEditPreview" = "Toggle edit+preview";
+"view.focusMode" = "Focus Mode";
+"view.outline" = "Outline";
+"view.imageUploadWindow" = "Image Upload Window";
+"view.documentAttributes" = "Document Attributes";
+"view.windowAlwaysOnTop" = "Window Always on Top";
+"view.customizeToolbar" = "Customize Toolbar…";
+"view.toggleToolbar" = "Show/Hide Toolbar";
+"view.toggleTabBar" = "Show/Hide Tab Bar";
+"view.resetFont" = "Reset Font Size";
+"view.increaseFont" = "Increase Font Size";
+"view.decreaseFont" = "Decrease Font Size";
+"view.prevTab" = "Previous Tab";
+"view.nextTab" = "Next Tab";
+"view.highlightCurrentLine" = "Highlight Current Line";
+"view.darkMode" = "Dark Mode";
+"view.listStyle" = "List Style";
+"view.listStyle.default" = "Default";
+"view.listStyle.compact" = "Compact";
+"view.enterFullScreen" = "Enter Full Screen";
+"view.openLibraryMode" = "Open Library Mode";
+"view.openFolderMode" = "Open Folder Mode";
+
+/* Publish */
+"publish.menu.title" = "Publish";
+"publish.copyHTML" = "Copy HTML";
+"publish.copyRichText" = "Copy as Rich Text";
+"publish.exportOrCopyImage" = "Export or copy as image…";
+"publish.exportTextbundle" = "Export as Textbundle…";
+"publish.exportPDF" = "Export as PDF…";
+"publish.exportHTML" = "Export as HTML…";
+"publish.exportMarkdown" = "Export as Markdown…";
+"publish.exportEpub" = "Export as Epub…";
+"publish.exportRTF" = "Export as RTF…";
+"publish.exportDocx" = "Export as Docx…";
+"publish.uploadImages" = "Upload local images to image host…";
+"publish.setupWordpressEvernote" = "Setup publish to Wordpress, Evernote…";
+
+/* Help */
+"help.userDocs" = "User Guide";
+"help.markdownSyntax" = "Markdown Syntax…";
+"help.sendFeedback" = "Send Feedback…";
+
+/* Promotion */
+"help.autoblog" = "Learn about AutoBlog…";
+
+/* Menu bar */
+"menubar.syncState" = "Sync: %@";
+
+/* Document attributes */
+"doc.attr.title" = "Title";
+"doc.attr.location" = "Location";
+"doc.attr.notSaved" = "Not saved";
+"doc.attr.createdAt" = "Created";
+"doc.attr.updatedAt" = "Updated";
+"doc.attr.characters" = "Characters";
+"doc.attr.words" = "Words";
+"doc.attr.lines" = "Lines";

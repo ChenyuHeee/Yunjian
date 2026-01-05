@@ -1,0 +1,546 @@
+#if os(macOS)
+
+import AppKit
+import Foundation
+import Markdown
+import UniformTypeIdentifiers
+import EditorEngine
+import YunjianCore
+
+extension AppRootViewModel {
+    // MARK: - File IO
+
+    func openFile() {
+        let panel = NSOpenPanel()
+        panel.canChooseFiles = true
+        panel.canChooseDirectories = false
+        panel.allowsMultipleSelection = false
+        panel.allowedContentTypes = [.text, .plainText, .utf8PlainText]
+
+        panel.begin { response in
+            guard response == .OK, let url = panel.url else { return }
+            Task { await self.openFile(url: url) }
+        }
+    }
+
+    func openRecentFile(url: URL) {
+        Task { await openFile(url: url) }
+    }
+
+    private func openFile(url: URL) async {
+        do {
+            let body = try String(contentsOf: url, encoding: .utf8)
+            let title = url.deletingPathExtension().lastPathComponent
+            let doc = YunjianCore.Document(title: title, body: body, fileURL: url)
+            try? await storage.upsertDocument(doc)
+            await load()
+            await openDocument(id: doc.id)
+            noteRecentFile(url)
+        } catch {
+            // 简化：忽略错误（后续可加 toast/alert）
+        }
+    }
+
+    func saveAs() {
+        guard let editor = activeEditor else { return }
+        let panel = NSSavePanel()
+        panel.nameFieldStringValue = (editor.document.title.isEmpty ? "Untitled" : editor.document.title) + ".md"
+        panel.allowedContentTypes = [.plainText]
+
+        panel.begin { response in
+            guard response == .OK, let url = panel.url else { return }
+            Task { await self.save(to: url) }
+        }
+    }
+
+    func save(to url: URL) async {
+        guard let editor = activeEditor else { return }
+        do {
+            try editor.document.body.write(to: url, atomically: true, encoding: .utf8)
+            var updated = editor.document
+            updated.fileURL = url
+            try? await storage.upsertDocument(updated)
+            await load()
+            noteRecentFile(url)
+        } catch {
+        }
+    }
+
+    func revealInFinder() {
+        guard let url = activeEditor?.document.fileURL else { return }
+        NSWorkspace.shared.activateFileViewerSelecting([url])
+    }
+
+    func closeWindow() {
+        NSApp.keyWindow?.performClose(nil)
+    }
+
+    func openNewWindow() {
+        // 先尽量使用系统动作；后续可换成 SwiftUI openWindow 多窗口。
+        NSApp.sendAction(#selector(NSApplication.newWindowForTab(_:)), to: nil, from: nil)
+    }
+
+    func pageSetup() {
+        let pageLayout = NSPageLayout()
+        pageLayout.runModal()
+    }
+
+    func printDocument() {
+        guard let body = activeEditor?.document.body else { return }
+        let textView = NSTextView(frame: NSRect(x: 0, y: 0, width: 595, height: 842))
+        textView.string = body
+        textView.font = NSFont.userFixedPitchFont(ofSize: NSFont.systemFontSize)
+
+        let printInfo = NSPrintInfo.shared
+        let op = NSPrintOperation(view: textView, printInfo: printInfo)
+        op.run()
+    }
+
+    // MARK: - Recent files
+
+    private var recentDefaultsKey: String { "yunjian.recentFileURLs" }
+
+    func loadRecentFilesFromDefaults() {
+        guard let raw = UserDefaults.standard.array(forKey: recentDefaultsKey) as? [String] else {
+            recentFileURLs = []
+            return
+        }
+        recentFileURLs = raw.compactMap { URL(string: $0) }
+            .filter { FileManager.default.fileExists(atPath: $0.path) }
+            .prefix(15)
+            .map { $0 }
+    }
+
+    func noteRecentFile(_ url: URL) {
+        NSDocumentController.shared.noteNewRecentDocumentURL(url)
+
+        var urls = recentFileURLs
+        urls.removeAll { $0 == url }
+        urls.insert(url, at: 0)
+        urls = Array(urls.prefix(15))
+        recentFileURLs = urls
+
+        UserDefaults.standard.set(urls.map { $0.absoluteString }, forKey: recentDefaultsKey)
+    }
+
+    func clearRecentFiles() {
+        recentFileURLs = []
+        UserDefaults.standard.removeObject(forKey: recentDefaultsKey)
+    }
+
+    // MARK: - Clipboard / Edit extras
+
+    func pasteAsPlainText() {
+        guard let s = NSPasteboard.general.string(forType: .string) else { return }
+        Task { await applyToActiveEditor { $0.replaceSelection(with: s) } }
+    }
+
+    func pasteAsPNG() {
+        guard let image = NSImage(pasteboard: .general) else { return }
+
+        let timestamp = ISO8601DateFormatter().string(from: Date())
+            .replacingOccurrences(of: ":", with: "")
+            .replacingOccurrences(of: "-", with: "")
+            .replacingOccurrences(of: "T", with: "-")
+            .replacingOccurrences(of: "Z", with: "")
+
+        let fileManager = FileManager.default
+        let preferredDir: URL? = activeEditor?.document.fileURL?.deletingLastPathComponent()
+
+        let fallbackDir = fileManager.urls(for: .picturesDirectory, in: .userDomainMask).first!
+            .appendingPathComponent("Yunjian", isDirectory: true)
+
+        let dir = preferredDir ?? fallbackDir
+        try? fileManager.createDirectory(at: dir, withIntermediateDirectories: true)
+
+        let filenameBase = "paste-\(timestamp)"
+        var fileURL = dir.appendingPathComponent(filenameBase).appendingPathExtension("png")
+        var collisionIndex = 2
+        while fileManager.fileExists(atPath: fileURL.path) {
+            fileURL = dir.appendingPathComponent("\(filenameBase)-\(collisionIndex)").appendingPathExtension("png")
+            collisionIndex += 1
+        }
+
+        guard let tiff = image.tiffRepresentation,
+              let rep = NSBitmapImageRep(data: tiff),
+              let png = rep.representation(using: .png, properties: [:])
+        else { return }
+
+        do {
+            try png.write(to: fileURL)
+            let markdown: String
+            if preferredDir != nil {
+                // 已保存文档：图片与 md 同目录，插入相对路径，便于移动/同步。
+                let encodedName = fileURL.lastPathComponent.addingPercentEncoding(withAllowedCharacters: .urlPathAllowed) ?? fileURL.lastPathComponent
+                markdown = "![](\(encodedName))"
+            } else {
+                markdown = "![](\(fileURL.absoluteString))"
+            }
+            Task { await applyToActiveEditor { $0.replaceSelection(with: markdown) } }
+        } catch {
+            if preferredDir != nil {
+                // 若目标目录不可写（权限/只读等），回退到图片目录。
+                try? fileManager.createDirectory(at: fallbackDir, withIntermediateDirectories: true)
+                var fallbackURL = fallbackDir.appendingPathComponent(filenameBase).appendingPathExtension("png")
+                var fallbackCollisionIndex = 2
+                while fileManager.fileExists(atPath: fallbackURL.path) {
+                    fallbackURL = fallbackDir.appendingPathComponent("\(filenameBase)-\(fallbackCollisionIndex)").appendingPathExtension("png")
+                    fallbackCollisionIndex += 1
+                }
+
+                do {
+                    try png.write(to: fallbackURL)
+                    let markdown = "![](\(fallbackURL.absoluteString))"
+                    Task { await applyToActiveEditor { $0.replaceSelection(with: markdown) } }
+                } catch {
+                    // ignore
+                }
+            }
+        }
+    }
+
+    func pasteHTMLAsMarkdown() {
+        if let html = NSPasteboard.general.string(forType: .html) {
+            let md = basicHTMLToMarkdown(html)
+            Task { await applyToActiveEditor { $0.replaceSelection(with: md) } }
+            return
+        }
+        // fallback
+        pasteAsPlainText()
+    }
+
+    func insertSpaceBetweenChineseAndLatin() async {
+        await applyToActiveEditor { editor in
+            let source = editor.document.body
+            editor.updateBody(insertCNSpace(source))
+        }
+    }
+
+    func insertHTMLEntity() async {
+        await applyToActiveEditor { editor in
+            editor.replaceSelection(with: "&nbsp;")
+        }
+    }
+
+    // MARK: - Publish
+
+    func copyHTML() {
+        guard let body = activeEditor?.document.body else { return }
+        let html = HTMLFormatter.format(body)
+        NSPasteboard.general.clearContents()
+        NSPasteboard.general.setString(html, forType: .string)
+        NSPasteboard.general.setString(html, forType: .html)
+    }
+
+    func copyRichText() {
+        guard let editor = activeEditor else { return }
+        let selected = editor.selectedTextOrAll()
+        let attr = NSAttributedString(string: selected)
+        guard let rtf = try? attr.data(from: NSRange(location: 0, length: attr.length), documentAttributes: [.documentType: NSAttributedString.DocumentType.rtf]) else { return }
+        NSPasteboard.general.clearContents()
+        NSPasteboard.general.setData(rtf, forType: .rtf)
+    }
+
+    func exportOrCopyImage() {
+        guard let editor = activeEditor else { return }
+        let text = editor.document.body
+
+        let attr = NSAttributedString(string: text, attributes: [.font: NSFont.userFixedPitchFont(ofSize: 13) ?? NSFont.systemFont(ofSize: 13)])
+        let size = NSSize(width: 800, height: max(600, CGFloat(attr.length) * 0.6))
+        let image = NSImage(size: size)
+        image.lockFocus()
+        NSColor.textBackgroundColor.setFill()
+        NSBezierPath(rect: NSRect(origin: .zero, size: size)).fill()
+        attr.draw(in: NSRect(x: 20, y: 20, width: size.width - 40, height: size.height - 40))
+        image.unlockFocus()
+
+        let panel = NSSavePanel()
+        panel.nameFieldStringValue = (editor.document.title.isEmpty ? "Untitled" : editor.document.title) + ".png"
+        panel.allowedContentTypes = [.png]
+        panel.begin { response in
+            guard response == .OK, let url = panel.url else { return }
+            guard let tiff = image.tiffRepresentation,
+                  let rep = NSBitmapImageRep(data: tiff),
+                  let png = rep.representation(using: .png, properties: [:])
+            else { return }
+            try? png.write(to: url)
+        }
+    }
+
+    func exportMarkdown() { exportText(ext: "md", content: activeEditor?.document.body ?? "") }
+
+    func exportHTML() {
+        let html = HTMLFormatter.format(activeEditor?.document.body ?? "")
+        exportText(ext: "html", content: html)
+    }
+
+    func exportRTF() {
+        let text = activeEditor?.document.body ?? ""
+        let attr = NSAttributedString(string: text)
+        let rtf = (try? attr.data(from: NSRange(location: 0, length: attr.length), documentAttributes: [.documentType: NSAttributedString.DocumentType.rtf])) ?? Data()
+        exportData(ext: "rtf", data: rtf)
+    }
+
+    func exportPDF() {
+        let text = activeEditor?.document.body ?? ""
+        let textView = NSTextView(frame: NSRect(x: 0, y: 0, width: 595, height: 842))
+        textView.string = text
+        textView.font = NSFont.userFixedPitchFont(ofSize: 12)
+        let data = textView.dataWithPDF(inside: textView.bounds)
+        exportData(ext: "pdf", data: data)
+    }
+
+    func exportEpub() { exportText(ext: "epub", content: activeEditor?.document.body ?? "") }
+    func exportDocx() { exportText(ext: "docx", content: activeEditor?.document.body ?? "") }
+    func exportTextbundle() { exportText(ext: "textbundle", content: activeEditor?.document.body ?? "") }
+
+    func uploadLocalImagesToImageHost() {
+        // MVP：先复用“图片上传窗口”入口，提供本地插图能力。
+        openImageUploadWindow()
+    }
+
+    // MARK: - Help
+
+    func openUserDocs() {
+        let url = URL(fileURLWithPath: FileManager.default.currentDirectoryPath)
+            .appendingPathComponent("docs/pre.md")
+        NSWorkspace.shared.open(url)
+    }
+
+    func openMarkdownSyntax() {
+        let url = URL(fileURLWithPath: FileManager.default.currentDirectoryPath)
+            .appendingPathComponent("docs/menubar.md")
+        NSWorkspace.shared.open(url)
+    }
+
+    func sendFeedback() {
+        // 简化：打开邮件
+        if let url = URL(string: "mailto:feedback@yunjian.app") {
+            NSWorkspace.shared.open(url)
+        }
+    }
+
+    func openAutoBlogWebsite() {
+        if let url = URL(string: "https://github.com/ChenyuHeee/AutoBlog") {
+            NSWorkspace.shared.open(url)
+        }
+    }
+
+    // MARK: - Syntax actions
+
+    func syntaxBold() async { await applyToActiveEditor { $0.wrapSelection(prefix: "**", suffix: "**") } }
+    func syntaxItalic() async { await applyToActiveEditor { $0.wrapSelection(prefix: "*", suffix: "*") } }
+    func syntaxUnderline() async { await applyToActiveEditor { $0.wrapSelection(prefix: "<u>", suffix: "</u>") } }
+    func syntaxStrikethrough() async { await applyToActiveEditor { $0.wrapSelection(prefix: "~~", suffix: "~~") } }
+
+    func syntaxLink() async {
+        await applyToActiveEditor { editor in
+            let selected = editor.selectedTextOrEmpty()
+            if selected.isEmpty {
+                editor.replaceSelection(with: "[](url)")
+            } else {
+                editor.replaceSelection(with: "[\(selected)](url)")
+            }
+        }
+    }
+
+    func syntaxImageSyntax() async {
+        await applyToActiveEditor { editor in
+            editor.replaceSelection(with: "![](path)")
+        }
+    }
+
+    func insertFileOrImage() {
+        let panel = NSOpenPanel()
+        panel.canChooseFiles = true
+        panel.allowsMultipleSelection = false
+        panel.begin { response in
+            guard response == .OK, let url = panel.url else { return }
+            Task { await self.applyToActiveEditor { editor in
+                let isImage = ["png", "jpg", "jpeg", "gif", "webp"].contains(url.pathExtension.lowercased())
+                let linkText = url.lastPathComponent
+
+                let finalURL: URL
+                if isImage, let copied = self.copyToAttachmentsIfNeeded(sourceURL: url, documentID: editor.document.id) {
+                    finalURL = copied
+                } else {
+                    finalURL = url
+                }
+
+                let markdown = isImage
+                    ? "![](" + finalURL.absoluteString + ")"
+                    : "[" + linkText + "](" + finalURL.absoluteString + ")"
+                editor.replaceSelection(with: markdown)
+            } }
+        }
+    }
+
+    func insertImage() {
+        let panel = NSOpenPanel()
+        panel.canChooseFiles = true
+        panel.allowsMultipleSelection = false
+        panel.allowedContentTypes = [.png, .jpeg, .gif, .webP]
+        panel.begin { response in
+            guard response == .OK, let url = panel.url else { return }
+            Task { await self.applyToActiveEditor { editor in
+                let finalURL = self.copyToAttachmentsIfNeeded(sourceURL: url, documentID: editor.document.id) ?? url
+                editor.replaceSelection(with: "![](\(finalURL.absoluteString))")
+            } }
+        }
+    }
+
+    func syntaxTable() async {
+        await applyToActiveEditor { editor in
+            editor.replaceSelection(with: "| Header | Header |\n| --- | --- |\n| Cell | Cell |\n")
+        }
+    }
+
+    func syntaxUnorderedList() async { await applyToActiveEditor { $0.prefixLines("- ") } }
+    func syntaxOrderedList() async { await applyToActiveEditor { $0.prefixLines("1. ") } }
+    func syntaxTaskList() async { await applyToActiveEditor { $0.prefixLines("- [ ] ") } }
+    func syntaxQuote() async { await applyToActiveEditor { $0.prefixLines("> ") } }
+
+    func syntaxInlineCode() async { await applyToActiveEditor { $0.wrapSelection(prefix: "`", suffix: "`") } }
+
+    func syntaxCodeBlock() async {
+        await applyToActiveEditor { editor in
+            editor.wrapSelection(prefix: "```\n", suffix: "\n```")
+        }
+    }
+
+    func syntaxInlineMath() async { await applyToActiveEditor { $0.wrapSelection(prefix: "$", suffix: "$") } }
+    func syntaxMathBlock() async { await applyToActiveEditor { $0.wrapSelection(prefix: "$$\n", suffix: "\n$$") } }
+
+    func syntaxHorizontalRule() async { await applyToActiveEditor { $0.replaceSelection(with: "\n---\n") } }
+
+    func syntaxHTMLComment() async { await applyToActiveEditor { $0.wrapSelection(prefix: "<!-- ", suffix: " -->") } }
+
+    func syntaxHeading(level: Int) async {
+        await applyToActiveEditor { editor in
+            editor.applyHeading(level: level)
+        }
+    }
+
+    func syntaxIndent() async { await applyToActiveEditor { $0.indentLines(by: 2) } }
+    func syntaxOutdent() async { await applyToActiveEditor { $0.outdentLines(by: 2) } }
+    func syntaxNewParagraph() async { await applyToActiveEditor { $0.replaceSelection(with: "\n\n") } }
+
+    func insertCurrentDate() async {
+        let f = DateFormatter()
+        f.dateFormat = "yyyy-MM-dd"
+        let s = f.string(from: Date())
+        await applyToActiveEditor { $0.replaceSelection(with: s) }
+    }
+
+    func insertCurrentTime() async {
+        let f = DateFormatter()
+        f.dateFormat = "HH:mm"
+        let s = f.string(from: Date())
+        await applyToActiveEditor { $0.replaceSelection(with: s) }
+    }
+
+    // MARK: - Helpers
+
+    private func exportText(ext: String, content: String) {
+        let panel = NSSavePanel()
+        panel.nameFieldStringValue = (activeEditor?.document.title.isEmpty == false ? activeEditor!.document.title : "Untitled") + "." + ext
+        panel.begin { response in
+            guard response == .OK, let url = panel.url else { return }
+            try? content.write(to: url, atomically: true, encoding: .utf8)
+        }
+    }
+
+    private func exportData(ext: String, data: Data) {
+        let panel = NSSavePanel()
+        panel.nameFieldStringValue = (activeEditor?.document.title.isEmpty == false ? activeEditor!.document.title : "Untitled") + "." + ext
+        panel.begin { response in
+            guard response == .OK, let url = panel.url else { return }
+            try? data.write(to: url)
+        }
+    }
+
+    private func applyToActiveEditor(_ block: (EditorViewModel) -> Void) async {
+        guard let editor = activeEditor else { return }
+        block(editor)
+    }
+
+    private func copyToAttachmentsIfNeeded(sourceURL: URL, documentID: DocumentID) -> URL? {
+        let fm = FileManager.default
+        guard let base = fm.urls(for: .applicationSupportDirectory, in: .userDomainMask).first else { return nil }
+
+        let folder = base
+            .appendingPathComponent("Yunjian", isDirectory: true)
+            .appendingPathComponent("Attachments", isDirectory: true)
+            .appendingPathComponent(documentID.rawValue.uuidString, isDirectory: true)
+
+        do {
+            try fm.createDirectory(at: folder, withIntermediateDirectories: true)
+        } catch {
+            return nil
+        }
+
+        let ext = sourceURL.pathExtension
+        let baseName = sourceURL.deletingPathExtension().lastPathComponent
+
+        func candidateURL(_ index: Int?) -> URL {
+            let name = index == nil ? baseName : "\(baseName)-\(index!)"
+            return folder.appendingPathComponent(name).appendingPathExtension(ext)
+        }
+
+        var dest = candidateURL(nil)
+        var i = 1
+        while fm.fileExists(atPath: dest.path) {
+            dest = candidateURL(i)
+            i += 1
+        }
+
+        do {
+            try fm.copyItem(at: sourceURL, to: dest)
+            return dest
+        } catch {
+            // If copying fails, fall back to using the original URL.
+            return nil
+        }
+    }
+
+    private func basicHTMLToMarkdown(_ html: String) -> String {
+        var s = html
+        s = s.replacingOccurrences(of: "\\r", with: "")
+        s = s.replacingOccurrences(of: "<br>", with: "\n", options: .caseInsensitive)
+        s = s.replacingOccurrences(of: "<br/>", with: "\n", options: .caseInsensitive)
+        s = s.replacingOccurrences(of: "<br />", with: "\n", options: .caseInsensitive)
+
+        // strong/em/code
+        s = s.replacingOccurrences(of: "(?is)<(strong|b)>(.*?)</(strong|b)>", with: "**$2**", options: .regularExpression)
+        s = s.replacingOccurrences(of: "(?is)<(em|i)>(.*?)</(em|i)>", with: "*$2*", options: .regularExpression)
+        s = s.replacingOccurrences(of: "(?is)<code>(.*?)</code>", with: "`$1`", options: .regularExpression)
+
+        // links
+        s = s.replacingOccurrences(of: "(?is)<a\\s+[^>]*href=\"([^\"]+)\"[^>]*>(.*?)</a>", with: "[$2]($1)", options: .regularExpression)
+
+        // paragraphs
+        s = s.replacingOccurrences(of: "(?is)</p>", with: "\n\n", options: .regularExpression)
+        s = s.replacingOccurrences(of: "(?is)<p[^>]*>", with: "", options: .regularExpression)
+
+        // strip remaining tags
+        s = s.replacingOccurrences(of: "(?is)<[^>]+>", with: "", options: .regularExpression)
+
+        return s.trimmingCharacters(in: .whitespacesAndNewlines)
+    }
+
+    private func insertCNSpace(_ input: String) -> String {
+        // Han <-> Latin/Digit spacing
+        let patterns: [(String, String)] = [
+            ("([\\p{Han}])([A-Za-z0-9])", "$1 $2"),
+            ("([A-Za-z0-9])([\\p{Han}])", "$1 $2")
+        ]
+
+        var s = input
+        for (p, r) in patterns {
+            s = s.replacingOccurrences(of: p, with: r, options: .regularExpression)
+        }
+        return s
+    }
+}
+
+#endif

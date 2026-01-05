@@ -1,0 +1,52 @@
+name: Yunjian
+options:
+  bundleIdPrefix: com.yunjian
+  deploymentTarget:
+    iOS: "17.0"
+    macOS: "14.0"
+
+targets:
+  YunjianApp:
+    type: application
+    platform: iOS
+    settings:
+      GENERATE_INFOPLIST_FILE: YES
+    sources:
+      - path: Apps/YunjianApp
+    dependencies:
+      - package: Yunjian
+        product: UIComponents
+      - package: Yunjian
+        product: StorageService
+      - package: Yunjian
+        product: SyncEngine
+      - package: Yunjian
+        product: EditorEngine
+      - package: Yunjian
+        product: YunjianCore
+
+  YunjianApp-macOS:
+    type: application
+    platform: macOS
+    settings:
+      GENERATE_INFOPLIST_FILE: YES
+      PRODUCT_NAME: 云简
+      INFOPLIST_KEY_CFBundleDisplayName: 云简
+      INFOPLIST_KEY_CFBundleName: 云简
+    sources:
+      - path: Apps/YunjianApp
+    dependencies:
+      - package: Yunjian
+        product: UIComponents
+      - package: Yunjian
+        product: StorageService
+      - package: Yunjian
+        product: SyncEngine
+      - package: Yunjian
+        product: EditorEngine
+      - package: Yunjian
+        product: YunjianCore
+
+packages:
+  Yunjian:
+    path: .
