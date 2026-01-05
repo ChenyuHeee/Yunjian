@@ -29,6 +29,22 @@ public struct LibraryScreen: View {
                 ForEach(root.documents) { doc in
                     Text(doc.title.isEmpty ? L10n.text("library.untitled") : doc.title)
                         .tag(doc.id)
+                        .contextMenu {
+                            Button(L10n.text("view.documentAttributes")) {
+                                Task { @MainActor in
+                                    await root.openDocument(id: doc.id)
+                                    root.openDocumentAttributes()
+                                }
+                            }
+                            Button(role: .destructive) {
+                                Task { @MainActor in
+                                    root.selectedDocumentID = doc.id
+                                    await root.deleteSelected()
+                                }
+                            } label: {
+                                Text(L10n.text("common.delete"))
+                            }
+                        }
                 }
                 }
             }
@@ -64,7 +80,7 @@ public struct LibraryScreen: View {
                     Button(L10n.text("common.save")) {
                         Task { await root.saveActiveDocument() }
                     }
-                    .disabled(!root.canSave)
+                    .disabled(root.activeEditor == nil || (!root.canSave && root.activeEditor?.document.fileURL != nil))
                 }
             } else {
                 HomeView()

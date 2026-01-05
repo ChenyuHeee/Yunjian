@@ -49,7 +49,7 @@ public struct YunjianMenuCommands: Commands {
         CommandGroup(replacing: .saveItem) {
             Button(L10n.text("common.save")) { Task { await root.saveActiveDocument() } }
                 .keyboardShortcut("s", modifiers: [.command])
-                .disabled(!root.canSave && root.activeEditor?.document.fileURL == nil)
+                .disabled(root.activeEditor == nil || (!root.canSave && root.activeEditor?.document.fileURL != nil))
 
 #if os(macOS)
             Button(L10n.text("file.saveAs")) { root.saveAs() }

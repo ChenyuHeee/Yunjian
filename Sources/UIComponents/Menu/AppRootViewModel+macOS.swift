@@ -10,6 +10,19 @@ import YunjianCore
 extension AppRootViewModel {
     // MARK: - File IO
 
+    func promptForSaveURL(defaultFilename: String) async -> URL? {
+        await withCheckedContinuation { continuation in
+            let panel = NSSavePanel()
+            panel.nameFieldStringValue = defaultFilename
+            panel.allowedContentTypes = [.plainText]
+            panel.canCreateDirectories = true
+
+            panel.begin { response in
+                continuation.resume(returning: (response == .OK) ? panel.url : nil)
+            }
+        }
+    }
+
     func openFile() {
         let panel = NSOpenPanel()
         panel.canChooseFiles = true

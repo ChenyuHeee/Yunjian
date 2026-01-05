@@ -291,6 +291,18 @@ public final class AppRootViewModel {
 
     public func saveActiveDocument() async {
         guard let activeEditor else { return }
+
+#if os(macOS)
+        if let url = activeEditor.document.fileURL {
+            await save(to: url)
+            return
+        }
+
+        if let url = await promptForSaveURL(defaultFilename: (activeEditor.document.title.isEmpty ? "Untitled" : activeEditor.document.title) + ".md") {
+            await save(to: url)
+        }
+        return
+#else
         try? await activeEditor.save()
         // 保存后刷新列表排序
         do {
@@ -298,6 +310,7 @@ public final class AppRootViewModel {
         } catch {
             documents = []
         }
+#endif
     }
 
     public func closeDocument() async {
