@@ -228,8 +228,8 @@ public struct YunjianMenuCommands: Commands {
             Button(L10n.text("view.enterFullScreen")) { root.enterFullScreen() }
 
             Divider()
-            Button(L10n.text("view.openLibraryMode")) { }
-            Button(L10n.text("view.openFolderMode")) { }
+                Button(L10n.text("view.openLibraryMode")) { root.openLibraryMode() }
+                Button(L10n.text("view.openFolderMode")) { root.openFolder() }
 #endif
         }
 

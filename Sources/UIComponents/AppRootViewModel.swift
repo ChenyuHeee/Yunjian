@@ -12,6 +12,21 @@ import AppKit
 @MainActor
 @Observable
 public final class AppRootViewModel {
+    public struct WorkspaceNode: Identifiable, Hashable, Sendable {
+        public let url: URL
+        public let isDirectory: Bool
+        public var children: [WorkspaceNode]?
+
+        public init(url: URL, isDirectory: Bool, children: [WorkspaceNode]? = nil) {
+            self.url = url
+            self.isDirectory = isDirectory
+            self.children = children
+        }
+
+        public var id: URL { url }
+        public var name: String { url.lastPathComponent }
+    }
+
     public private(set) var documents: [Document] = []
     public var selectedDocumentID: DocumentID?
 
@@ -53,6 +68,10 @@ public final class AppRootViewModel {
 
     // Recent files (macOS)
     public var recentFileURLs: [URL] = []
+
+    // Folder mode (macOS)
+    public internal(set) var openedFolderURL: URL?
+    public internal(set) var folderTree: [WorkspaceNode] = []
 
     public let storage: StorageServiceProtocol
     public let sync: SyncEngineProtocol
@@ -316,5 +335,10 @@ public final class AppRootViewModel {
     public func closeDocument() async {
         selectedDocumentID = nil
         activeEditor = nil
+    }
+
+    public func openLibraryMode() {
+        openedFolderURL = nil
+        folderTree = []
     }
 }

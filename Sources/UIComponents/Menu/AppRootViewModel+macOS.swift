@@ -40,6 +40,72 @@ extension AppRootViewModel {
         Task { await openFile(url: url) }
     }
 
+    func openFolder() {
+        let panel = NSOpenPanel()
+        panel.canChooseFiles = false
+        panel.canChooseDirectories = true
+        panel.allowsMultipleSelection = false
+
+        panel.begin { response in
+            guard response == .OK, let url = panel.url else { return }
+            Task { await self.openFolder(url: url) }
+        }
+    }
+
+    private func openFolder(url: URL) async {
+        openedFolderURL = url
+
+        let built: [WorkspaceNode] = await Task.detached(priority: .userInitiated) {
+            Self.buildWorkspaceTree(root: url)
+        }.value
+
+        folderTree = built
+    }
+
+    private nonisolated static func buildWorkspaceTree(root: URL) -> [WorkspaceNode] {
+        let allowedExtensions: Set<String> = ["md", "markdown", "txt"]
+        return buildChildren(of: root, allowedExtensions: allowedExtensions)
+    }
+
+    private nonisolated static func buildChildren(
+        of directoryURL: URL,
+        allowedExtensions: Set<String>
+    ) -> [WorkspaceNode] {
+        guard let urls = try? FileManager.default.contentsOfDirectory(
+            at: directoryURL,
+            includingPropertiesForKeys: [.isDirectoryKey, .isHiddenKey, .isSymbolicLinkKey],
+            options: [.skipsPackageDescendants]
+        ) else {
+            return []
+        }
+
+        var directories: [WorkspaceNode] = []
+        var files: [WorkspaceNode] = []
+
+        for url in urls {
+            guard let values = try? url.resourceValues(forKeys: [.isDirectoryKey, .isHiddenKey, .isSymbolicLinkKey]) else {
+                continue
+            }
+            if values.isHidden == true { continue }
+            if values.isSymbolicLink == true { continue }
+
+            if values.isDirectory == true {
+                let children = buildChildren(of: url, allowedExtensions: allowedExtensions)
+                // Keep empty directories out to avoid noisy trees.
+                if children.isEmpty { continue }
+                directories.append(WorkspaceNode(url: url, isDirectory: true, children: children))
+            } else {
+                let ext = url.pathExtension.lowercased()
+                guard allowedExtensions.contains(ext) else { continue }
+                files.append(WorkspaceNode(url: url, isDirectory: false))
+            }
+        }
+
+        directories.sort { $0.name.localizedStandardCompare($1.name) == .orderedAscending }
+        files.sort { $0.name.localizedStandardCompare($1.name) == .orderedAscending }
+        return directories + files
+    }
+
     private func openFile(url: URL) async {
         do {
             let body = try String(contentsOf: url, encoding: .utf8)

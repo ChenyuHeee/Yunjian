@@ -12,29 +12,58 @@ public struct LibraryScreen: View {
     public var body: some View {
         @Bindable var root = root
         NavigationSplitView {
-            List(selection: $root.selectedDocumentID) {
-                Section(L10n.text("sidebar.documents")) {
-                ForEach(root.documents) { doc in
-                    Text(doc.title.isEmpty ? L10n.text("library.untitled") : doc.title)
-                        .tag(doc.id)
-                        .contextMenu {
-                            Button(L10n.text("view.documentAttributes")) {
-                                Task { @MainActor in
-                                    await root.openDocument(id: doc.id)
-                                    root.openDocumentAttributes()
+            Group {
+#if os(macOS)
+                if let folder = root.openedFolderURL {
+                    List {
+                        Section(folder.lastPathComponent) {
+                            OutlineGroup(root.folderTree, children: \.children) { node in
+                                if node.isDirectory {
+                                    Text(node.name)
+                                } else {
+                                    Button(node.name) {
+                                        root.openRecentFile(url: node.url)
+                                    }
                                 }
-                            }
-                            Button(role: .destructive) {
-                                Task { @MainActor in
-                                    root.selectedDocumentID = doc.id
-                                    await root.deleteSelected()
-                                }
-                            } label: {
-                                Text(L10n.text("common.delete"))
                             }
                         }
+                    }
+                } else {
+                    List(selection: $root.selectedDocumentID) {
+                        Section(L10n.text("sidebar.documents")) {
+                            ForEach(root.documents) { doc in
+                                Text(doc.title.isEmpty ? L10n.text("library.untitled") : doc.title)
+                                    .tag(doc.id)
+                                    .contextMenu {
+                                        Button(L10n.text("view.documentAttributes")) {
+                                            Task { @MainActor in
+                                                await root.openDocument(id: doc.id)
+                                                root.openDocumentAttributes()
+                                            }
+                                        }
+                                        Button(role: .destructive) {
+                                            Task { @MainActor in
+                                                root.selectedDocumentID = doc.id
+                                                await root.deleteSelected()
+                                            }
+                                        } label: {
+                                            Text(L10n.text("common.delete"))
+                                        }
+                                    }
+                            }
+                        }
+                    }
                 }
+#else
+                List(selection: $root.selectedDocumentID) {
+                    Section(L10n.text("sidebar.documents")) {
+                        ForEach(root.documents) { doc in
+                            Text(doc.title.isEmpty ? L10n.text("library.untitled") : doc.title)
+                                .tag(doc.id)
+                        }
+                    }
                 }
+#endif
             }
             .toolbar {
                 Button(L10n.text("common.new")) { Task { await root.createDocument() } }
