@@ -2,6 +2,7 @@ import SwiftUI
 import YunjianCore
 
 public struct DocumentAttributesView: View {
+    @Environment(\.dismiss) private var dismiss
     private let document: Document
 
     public init(document: Document) {
@@ -25,9 +26,20 @@ public struct DocumentAttributesView: View {
             }
 
             Spacer(minLength: 0)
+
+            HStack {
+                Spacer()
+                Button(L10n.text("common.ok")) {
+                    dismiss()
+                }
+                .keyboardShortcut(.defaultAction)
+            }
         }
         .padding(16)
         .frame(minWidth: 520, minHeight: 320)
+#if os(macOS)
+        .onExitCommand { dismiss() }
+#endif
     }
 
     private var displayTitle: String {
