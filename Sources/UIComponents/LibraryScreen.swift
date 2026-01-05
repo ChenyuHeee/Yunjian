@@ -13,18 +13,6 @@ public struct LibraryScreen: View {
         @Bindable var root = root
         NavigationSplitView {
             List(selection: $root.selectedDocumentID) {
-#if os(macOS)
-                if !root.recentFileURLs.isEmpty {
-                    Section(L10n.text("sidebar.recentFiles")) {
-                        ForEach(root.recentFileURLs, id: \.self) { url in
-                            Button(url.lastPathComponent) {
-                                root.openRecentFile(url: url)
-                            }
-                        }
-                    }
-                }
-#endif
-
                 Section(L10n.text("sidebar.documents")) {
                 ForEach(root.documents) { doc in
                     Text(doc.title.isEmpty ? L10n.text("library.untitled") : doc.title)
