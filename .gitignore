@@ -25,6 +25,10 @@ Package.resolved
 # XcodeGen / local build output used by scripts
 .derivedData/
 
+# Local release build artifacts
+.derivedData-*/
+dist/
+
 # Crash logs
 *.crash
 
