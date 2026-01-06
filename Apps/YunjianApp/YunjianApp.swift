@@ -11,6 +11,7 @@ import UniformTypeIdentifiers
 private enum YunjianAppShared {
     static var root: AppRootViewModel?
     static var isTerminating: Bool = false
+    static var pendingOpenFileURLs: [URL] = []
 }
 
 @MainActor
@@ -22,6 +23,42 @@ final class YunjianAppDelegate: NSObject, NSApplicationDelegate {
         NSApp.setActivationPolicy(.regular)
         debugLog("didFinishLaunching")
         bringMainWindowToFront(retryCount: 10)
+        flushPendingOpenFilesIfNeeded()
+    }
+
+    func application(_ application: NSApplication, openFile filename: String) -> Bool {
+        openFileURL(URL(fileURLWithPath: filename))
+        return true
+    }
+
+    func application(_ application: NSApplication, openFiles filenames: [String]) {
+        for filename in filenames {
+            openFileURL(URL(fileURLWithPath: filename))
+        }
+        application.reply(toOpenOrPrint: .success)
+    }
+
+    private func openFileURL(_ url: URL) {
+        guard url.isFileURL else { return }
+        if let root = YunjianAppShared.root {
+            Task { await root.openFile(url: url) }
+        } else {
+            YunjianAppShared.pendingOpenFileURLs.append(url)
+        }
+    }
+
+    private func flushPendingOpenFilesIfNeeded() {
+        guard let root = YunjianAppShared.root else { return }
+        guard !YunjianAppShared.pendingOpenFileURLs.isEmpty else { return }
+
+        let urls = YunjianAppShared.pendingOpenFileURLs
+        YunjianAppShared.pendingOpenFileURLs = []
+
+        Task {
+            for url in urls {
+                await root.openFile(url: url)
+            }
+        }
     }
 
     func applicationShouldTerminate(_ sender: NSApplication) -> NSApplication.TerminateReply {
