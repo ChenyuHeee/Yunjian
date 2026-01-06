@@ -33,6 +33,7 @@ targets:
       PRODUCT_NAME: 云简
       INFOPLIST_KEY_CFBundleDisplayName: 云简
       INFOPLIST_KEY_CFBundleName: 云简
+      INFOPLIST_KEY_CFBundleIconFile: AppIcon
     sources:
       - path: Apps/YunjianApp
     dependencies:

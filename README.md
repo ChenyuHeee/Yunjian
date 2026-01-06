@@ -5,6 +5,8 @@
 **云简**，一款凝萃东方书写意韵的 Markdown 编辑器。  
 化繁为简，以明文心；落键成章，自在从容。
 
+![Icon](docs/icons/yunjian-icon.png)
+
 ## 一句话
 
 原生 Swift/SwiftUI 打造的 Markdown 写作应用：编辑、预览、分屏一体，专注写作与发布。
