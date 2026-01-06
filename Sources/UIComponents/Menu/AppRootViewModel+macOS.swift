@@ -515,6 +515,44 @@ extension AppRootViewModel {
     func syntaxOutdent() async { await applyToActiveEditor { $0.outdentLines(by: 2) } }
     func syntaxNewParagraph() async { await applyToActiveEditor { $0.replaceSelection(with: "\n\n") } }
 
+    func editAddBlankLinesForWholeDocument() async {
+        await applyToActiveEditor { editor in
+            let source = editor.document.body as NSString
+            let length = source.length
+            guard length > 0 else { return }
+
+            let selectionLocation = max(0, min(editor.selection.location, length))
+            var insertedBeforeSelection = 0
+
+            let output = NSMutableString()
+            var lastCopiedIndex = 0
+
+            for i in 0..<length {
+                if source.character(at: i) != 10 { continue } // '\n'
+
+                output.append(source.substring(with: NSRange(location: lastCopiedIndex, length: i - lastCopiedIndex + 1)))
+
+                let nextIsNewline = (i + 1 < length) && (source.character(at: i + 1) == 10)
+                if !nextIsNewline {
+                    output.append("\n")
+                    if i < selectionLocation { insertedBeforeSelection += 1 }
+                }
+
+                lastCopiedIndex = i + 1
+            }
+
+            if lastCopiedIndex < length {
+                output.append(source.substring(with: NSRange(location: lastCopiedIndex, length: length - lastCopiedIndex)))
+            }
+
+            let newBody = output as String
+            guard newBody != editor.document.body else { return }
+
+            editor.updateBody(newBody)
+            editor.updateSelection(location: selectionLocation + insertedBeforeSelection, length: editor.selection.length)
+        }
+    }
+
     func insertCurrentDate() async {
         let f = DateFormatter()
         f.dateFormat = "yyyy-MM-dd"

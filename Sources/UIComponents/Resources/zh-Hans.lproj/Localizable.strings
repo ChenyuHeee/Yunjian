@@ -67,7 +67,7 @@
 "edit.pasteAsPNG" = "粘贴为 PNG";
 "edit.pasteAsPlainText" = "粘贴为纯文本";
 "edit.pasteHTMLAsMarkdown" = "将 HTML 粘贴为 Markdown";
-"edit.oneClickNewline" = "一键换行（补空行）";
+"edit.oneClickNewline" = "全文补空行";
 "edit.insertCNSpace" = "在中文和半角的英文、数字之间插入空格";
 "edit.insertHTMLEntity" = "插入 HTML 实体";
 
