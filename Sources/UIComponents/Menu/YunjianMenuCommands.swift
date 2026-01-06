@@ -268,8 +268,7 @@ public struct YunjianMenuCommands: Commands {
         // 帮助：替换系统默认“AppName 帮助”（未配置 Help Book 时会提示未找到帮助文档）
         CommandGroup(replacing: .help) {
 #if os(macOS)
-            Button(L10n.text("help.userDocs")) { root.openUserDocs() }
-            Button(L10n.text("help.menubarGuide")) { root.openMenuBarGuide() }
+            Button(L10n.text("help.helpDocs")) { root.openHelpDocs() }
             Button(L10n.text("help.markdownSyntax")) { root.openMarkdownSyntax() }
 
             Divider()

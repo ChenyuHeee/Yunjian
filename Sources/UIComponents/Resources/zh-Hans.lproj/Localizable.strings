@@ -143,8 +143,7 @@
 "publish.setupWordpressEvernote" = "设置发布到 Wordpress, Evernote…";
 
 /* 帮助 */
-"help.userDocs" = "使用文档";
-"help.menubarGuide" = "菜单栏说明…";
+"help.helpDocs" = "帮助文档";
 "help.markdownSyntax" = "Markdown 语法…";
 "help.homepage" = "项目主页…";
 "help.releaseNotes" = "版本更新…";

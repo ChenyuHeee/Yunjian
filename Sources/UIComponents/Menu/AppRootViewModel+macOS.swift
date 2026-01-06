@@ -380,8 +380,8 @@ extension AppRootViewModel {
 
     // MARK: - Help
 
-    func openUserDocs() {
-        openURLString("https://github.com/ChenyuHeee/Yunjian#readme")
+    func openHelpDocs() {
+        openURLString("https://github.com/ChenyuHeee/Yunjian/blob/main/docs/help.md")
     }
 
     func openProjectHomepage() {
@@ -394,10 +394,6 @@ extension AppRootViewModel {
 
     func reportIssue() {
         openURLString("https://github.com/ChenyuHeee/Yunjian/issues/new")
-    }
-
-    func openMenuBarGuide() {
-        openURLString("https://github.com/ChenyuHeee/Yunjian/blob/main/docs/menubar.md")
     }
 
     func openMarkdownSyntax() {

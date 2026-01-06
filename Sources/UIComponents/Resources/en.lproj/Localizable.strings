@@ -143,8 +143,7 @@
 "publish.setupWordpressEvernote" = "Setup publish to Wordpress, Evernote…";
 
 /* Help */
-"help.userDocs" = "User Guide";
-"help.menubarGuide" = "Menu Bar Guide…";
+"help.helpDocs" = "Help";
 "help.markdownSyntax" = "Markdown Syntax…";
 "help.homepage" = "Project Homepage…";
 "help.releaseNotes" = "Release Notes…";
