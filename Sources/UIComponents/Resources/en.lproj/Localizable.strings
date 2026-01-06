@@ -144,7 +144,11 @@
 
 /* Help */
 "help.userDocs" = "User Guide";
+"help.menubarGuide" = "Menu Bar Guide…";
 "help.markdownSyntax" = "Markdown Syntax…";
+"help.homepage" = "Project Homepage…";
+"help.releaseNotes" = "Release Notes…";
+"help.reportIssue" = "Report an Issue…";
 "help.sendFeedback" = "Send Feedback…";
 
 /* Promotion */

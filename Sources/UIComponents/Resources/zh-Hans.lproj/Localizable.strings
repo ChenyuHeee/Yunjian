@@ -144,7 +144,11 @@
 
 /* 帮助 */
 "help.userDocs" = "使用文档";
+"help.menubarGuide" = "菜单栏说明…";
 "help.markdownSyntax" = "Markdown 语法…";
+"help.homepage" = "项目主页…";
+"help.releaseNotes" = "版本更新…";
+"help.reportIssue" = "提交 Issue…";
 "help.sendFeedback" = "发送建议…";
 
 /* 推广 */

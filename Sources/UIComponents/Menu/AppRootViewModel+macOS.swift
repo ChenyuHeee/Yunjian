@@ -381,22 +381,37 @@ extension AppRootViewModel {
     // MARK: - Help
 
     func openUserDocs() {
-        let url = URL(fileURLWithPath: FileManager.default.currentDirectoryPath)
-            .appendingPathComponent("docs/pre.md")
-        NSWorkspace.shared.open(url)
+        openURLString("https://github.com/ChenyuHeee/Yunjian#readme")
+    }
+
+    func openProjectHomepage() {
+        openURLString("https://github.com/ChenyuHeee/Yunjian")
+    }
+
+    func openReleaseNotes() {
+        openURLString("https://github.com/ChenyuHeee/Yunjian/releases")
+    }
+
+    func reportIssue() {
+        openURLString("https://github.com/ChenyuHeee/Yunjian/issues/new")
+    }
+
+    func openMenuBarGuide() {
+        openURLString("https://github.com/ChenyuHeee/Yunjian/blob/main/docs/menubar.md")
     }
 
     func openMarkdownSyntax() {
-        let url = URL(fileURLWithPath: FileManager.default.currentDirectoryPath)
-            .appendingPathComponent("docs/menubar.md")
-        NSWorkspace.shared.open(url)
+        openURLString("https://commonmark.org/help/")
     }
 
     func sendFeedback() {
         // 简化：打开邮件
-        if let url = URL(string: "mailto:feedback@yunjian.app") {
-            NSWorkspace.shared.open(url)
-        }
+        openURLString("mailto:feedback@yunjian.app")
+    }
+
+    private func openURLString(_ string: String) {
+        guard let url = URL(string: string) else { return }
+        NSWorkspace.shared.open(url)
     }
 
     func openAutoBlogWebsite() {

@@ -270,7 +270,15 @@ public struct YunjianMenuCommands: Commands {
 #if os(macOS)
             Divider()
             Button(L10n.text("help.userDocs")) { root.openUserDocs() }
+            Button(L10n.text("help.menubarGuide")) { root.openMenuBarGuide() }
             Button(L10n.text("help.markdownSyntax")) { root.openMarkdownSyntax() }
+
+            Divider()
+            Button(L10n.text("help.homepage")) { root.openProjectHomepage() }
+            Button(L10n.text("help.releaseNotes")) { root.openReleaseNotes() }
+            Button(L10n.text("help.reportIssue")) { root.reportIssue() }
+
+            Divider()
             Button(L10n.text("help.sendFeedback")) { root.sendFeedback() }
 #endif
         }
