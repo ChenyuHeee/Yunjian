@@ -5,7 +5,9 @@
 **云简**，一款凝萃东方书写意韵的 Markdown 编辑器。  
 化繁为简，以明文心；落键成章，自在从容。
 
-![Icon](docs/icons/yunjian-icon.png)
+<p align="center">
+	<img src="docs/icons/yunjian-icon.png" width="96" alt="Yunjian Icon" />
+</p>
 
 ## 一句话
 

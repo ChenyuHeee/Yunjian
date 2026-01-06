@@ -14,9 +14,24 @@ public enum YunjianAboutPanel {
         let author = "He Chenyu, Zhejiang University"
         let credits = NSAttributedString(string: "\(intro)\n\n\(author)\n")
 
-        NSApplication.shared.orderFrontStandardAboutPanel(options: [
+        let appIcon: NSImage? = {
+            if let url = Bundle.main.url(forResource: "AppIcon", withExtension: "icns"),
+               let image = NSImage(contentsOf: url) {
+                return image
+            }
+
+            return NSApp.applicationIconImage
+        }()
+
+        var options: [NSApplication.AboutPanelOptionKey: Any] = [
             .credits: credits
-        ])
+        ]
+
+        if let appIcon {
+            options[.applicationIcon] = appIcon
+        }
+
+        NSApplication.shared.orderFrontStandardAboutPanel(options: options)
 
         NSApp.activate(ignoringOtherApps: true)
     }

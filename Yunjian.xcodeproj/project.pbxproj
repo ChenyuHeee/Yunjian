@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		0F4F1A0E65AABC8B479D6CD8 /* YunjianApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 281B024E20C18309D99AE9B5 /* YunjianApp.swift */; };
 		21A85E10D0FA30D3BD911BCF /* YunjianCore in Frameworks */ = {isa = PBXBuildFile; productRef = 088356E8EB1C3438C2A4CF3B /* YunjianCore */; };
+		22AACE36C33E2394706CA91E /* Info-macOS.plist in Resources */ = {isa = PBXBuildFile; fileRef = 9E92E7ECA694823CF0AB1D99 /* Info-macOS.plist */; };
 		2E7E02034199442C6F7A4F70 /* SyncEngine in Frameworks */ = {isa = PBXBuildFile; productRef = E74786B89D6E93FB4C1F81FD /* SyncEngine */; };
 		627E16126FAB1E6EDE59298E /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 35678ED17CB415616C7EE5E6 /* Localizable.strings */; };
 		72C202F64910640EC3E30CB7 /* YunjianCore in Frameworks */ = {isa = PBXBuildFile; productRef = 6B12002E99A62B612DCF45E5 /* YunjianCore */; };
@@ -30,6 +31,7 @@
 		281B024E20C18309D99AE9B5 /* YunjianApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YunjianApp.swift; sourceTree = "<group>"; };
 		62D30EA3A2157A162E7A19A5 /* YunjianApp-macOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "YunjianApp-macOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		7E7167A6518DE4192097BCA9 /* Yunjian */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Yunjian; path = .; sourceTree = SOURCE_ROOT; };
+		9E92E7ECA694823CF0AB1D99 /* Info-macOS.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "Info-macOS.plist"; sourceTree = "<group>"; };
 		A869B72DDDEFF839D8AE944D /* YunjianApp.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = YunjianApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		AE424910BB66D0C6D5D63DB5 /* AppIcon.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = AppIcon.icns; sourceTree = "<group>"; };
 		C33909DDB969AA4C519FEBF6 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
@@ -102,6 +104,7 @@
 		BFABDFAF7036C48A6C94EB8E /* YunjianApp */ = {
 			isa = PBXGroup;
 			children = (
+				9E92E7ECA694823CF0AB1D99 /* Info-macOS.plist */,
 				281B024E20C18309D99AE9B5 /* YunjianApp.swift */,
 				8BADB148B2C36E3EA4A12BA8 /* Resources */,
 			);
@@ -209,6 +212,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				C33AD69F0EE522D99B841162 /* AppIcon.icns in Resources */,
+				22AACE36C33E2394706CA91E /* Info-macOS.plist in Resources */,
 				D9826915C0BDF609D6B4229E /* Localizable.strings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -404,10 +408,8 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				COMBINE_HIDPI_IMAGES = YES;
-				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_KEY_CFBundleDisplayName = "云简";
-				INFOPLIST_KEY_CFBundleIconFile = AppIcon;
-				INFOPLIST_KEY_CFBundleName = "云简";
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = "Apps/YunjianApp/Info-macOS.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
@@ -423,10 +425,8 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				COMBINE_HIDPI_IMAGES = YES;
-				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_KEY_CFBundleDisplayName = "云简";
-				INFOPLIST_KEY_CFBundleIconFile = AppIcon;
-				INFOPLIST_KEY_CFBundleName = "云简";
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = "Apps/YunjianApp/Info-macOS.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
