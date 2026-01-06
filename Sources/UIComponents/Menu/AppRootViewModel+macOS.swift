@@ -106,7 +106,7 @@ extension AppRootViewModel {
         return directories + files
     }
 
-    private func openFile(url: URL) async {
+    func openFile(url: URL) async {
         do {
             let body = try String(contentsOf: url, encoding: .utf8)
             let title = url.deletingPathExtension().lastPathComponent

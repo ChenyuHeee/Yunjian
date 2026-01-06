@@ -22,7 +22,7 @@ public struct LibraryScreen: View {
                                     Text(node.name)
                                 } else {
                                     Button(node.name) {
-                                        root.openRecentFile(url: node.url)
+                                        Task { await root.openFile(url: node.url) }
                                     }
                                 }
                             }

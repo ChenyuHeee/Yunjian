@@ -241,7 +241,7 @@ public final class AppRootViewModel {
 
     public func toggleTabBar() {
 #if os(macOS)
-        NSApp.sendAction(Selector(("toggleTabBar:")), to: nil, from: nil)
+        NSApp.sendAction(#selector(NSWindow.toggleTabBar(_:)), to: nil, from: nil)
 #endif
     }
 
