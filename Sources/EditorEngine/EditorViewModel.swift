@@ -65,6 +65,13 @@ public final class EditorViewModel {
         await sync?.requestSync(reason: "local-save")
     }
 
+    public func markSaved(fileURL: URL? = nil) {
+        if let fileURL {
+            document.fileURL = fileURL
+        }
+        isDirty = false
+    }
+
     public func selectedTextOrEmpty() -> String {
         let current = document.body
         let nsRange = NSRange(location: selection.location, length: selection.length)

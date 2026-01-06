@@ -136,9 +136,8 @@ extension AppRootViewModel {
         guard let editor = activeEditor else { return }
         do {
             try editor.document.body.write(to: url, atomically: true, encoding: .utf8)
-            var updated = editor.document
-            updated.fileURL = url
-            try? await storage.upsertDocument(updated)
+            editor.markSaved(fileURL: url)
+            try? await storage.upsertDocument(editor.document)
             await load()
             noteRecentFile(url)
         } catch {
