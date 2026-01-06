@@ -67,6 +67,7 @@
 "edit.pasteAsPNG" = "Paste as PNG";
 "edit.pasteAsPlainText" = "Paste as Plain Text";
 "edit.pasteHTMLAsMarkdown" = "Paste HTML as Markdown";
+"edit.oneClickNewline" = "One-Click Newline (Blank Line)";
 "edit.insertCNSpace" = "Insert spaces between Chinese and Latin";
 "edit.insertHTMLEntity" = "Insert HTML entity";
 

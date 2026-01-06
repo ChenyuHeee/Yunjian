@@ -91,6 +91,8 @@ public struct YunjianMenuCommands: Commands {
 #if os(macOS)
             Divider()
 
+            Button(L10n.text("edit.oneClickNewline")) { Task { await root.syntaxNewParagraph() } }
+
             Button(L10n.text("edit.pasteAsPNG")) { root.pasteAsPNG() }
 
             Button(L10n.text("edit.pasteAsPlainText")) { root.pasteAsPlainText() }
