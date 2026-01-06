@@ -12,6 +12,31 @@ private enum YunjianAppShared {
     static var root: AppRootViewModel?
     static var isTerminating: Bool = false
     static var pendingOpenFileURLs: [URL] = []
+
+    @MainActor
+    static func openOrEnqueueFileURL(_ url: URL) {
+        guard url.isFileURL else { return }
+        if let root {
+            Task { await root.openFile(url: url) }
+        } else {
+            pendingOpenFileURLs.append(url)
+        }
+    }
+
+    @MainActor
+    static func flushPendingOpenFilesIfPossible() {
+        guard let root else { return }
+        guard !pendingOpenFileURLs.isEmpty else { return }
+
+        let urls = pendingOpenFileURLs
+        pendingOpenFileURLs = []
+
+        Task {
+            for url in urls {
+                await root.openFile(url: url)
+            }
+        }
+    }
 }
 
 @MainActor
@@ -39,25 +64,16 @@ final class YunjianAppDelegate: NSObject, NSApplicationDelegate {
     }
 
     private func openFileURL(_ url: URL) {
-        guard url.isFileURL else { return }
-        if let root = YunjianAppShared.root {
-            Task { await root.openFile(url: url) }
-        } else {
-            YunjianAppShared.pendingOpenFileURLs.append(url)
+        Task { @MainActor in
+            YunjianAppShared.openOrEnqueueFileURL(url)
+            // Make sure the window becomes visible when opening from Finder.
+            bringMainWindowToFront(retryCount: 10)
         }
     }
 
     private func flushPendingOpenFilesIfNeeded() {
-        guard let root = YunjianAppShared.root else { return }
-        guard !YunjianAppShared.pendingOpenFileURLs.isEmpty else { return }
-
-        let urls = YunjianAppShared.pendingOpenFileURLs
-        YunjianAppShared.pendingOpenFileURLs = []
-
-        Task {
-            for url in urls {
-                await root.openFile(url: url)
-            }
+        Task { @MainActor in
+            YunjianAppShared.flushPendingOpenFilesIfPossible()
         }
     }
 
@@ -382,6 +398,11 @@ struct YunjianApp: App {
         let rootVM = AppRootViewModel(storage: storage, sync: sync, collaboration: collab)
     #if os(macOS)
         YunjianAppShared.root = rootVM
+        // When launching by double-click / Finder "Open With", open-file events can arrive
+        // before SwiftUI finishes creating the root view model. Flush once root is ready.
+        Task { @MainActor in
+            YunjianAppShared.flushPendingOpenFilesIfPossible()
+        }
     #endif
         _root = State(initialValue: rootVM)
     }
