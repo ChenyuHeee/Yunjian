@@ -50,6 +50,7 @@ public final class AppRootViewModel {
     public private(set) var showDocumentLocationInNav: Bool = false
     public private(set) var prefersDarkMode: Bool = false
     public private(set) var highlightCurrentLine: Bool = false
+    public private(set) var isTypewriterMode: Bool = false
 
     public private(set) var editorFontDelta: Double = 0
 
@@ -176,6 +177,10 @@ public final class AppRootViewModel {
 
     public func toggleHighlightCurrentLine() {
         highlightCurrentLine.toggle()
+    }
+
+    public func toggleTypewriterMode() {
+        isTypewriterMode.toggle()
     }
 
     public func resetFontSize() { editorFontDelta = 0 }

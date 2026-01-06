@@ -6,6 +6,7 @@ public struct EditorScreen: View {
     @State private var viewModel: EditorViewModel
     private let fontDelta: Double
     private let highlightCurrentLine: Bool
+    private let typewriterMode: Bool
 
 #if os(macOS)
     @State private var macSelection: NSRange = .init(location: 0, length: 0)
@@ -15,12 +16,14 @@ public struct EditorScreen: View {
         _viewModel = State(initialValue: viewModel)
         self.fontDelta = fontDelta
         self.highlightCurrentLine = false
+        self.typewriterMode = false
     }
 
-    public init(viewModel: EditorViewModel, fontDelta: Double = 0, highlightCurrentLine: Bool) {
+    public init(viewModel: EditorViewModel, fontDelta: Double = 0, highlightCurrentLine: Bool, typewriterMode: Bool = false) {
         _viewModel = State(initialValue: viewModel)
         self.fontDelta = fontDelta
         self.highlightCurrentLine = highlightCurrentLine
+        self.typewriterMode = typewriterMode
     }
 
     public var body: some View {
@@ -40,7 +43,8 @@ public struct EditorScreen: View {
                 selection: $macSelection
                 ,
                 fontSize: CGFloat(NSFont.systemFontSize + fontDelta),
-                highlightCurrentLine: highlightCurrentLine
+                highlightCurrentLine: highlightCurrentLine,
+                typewriterMode: typewriterMode
             )
             .onChange(of: macSelection) { _, newValue in
                 viewModel.updateSelection(location: newValue.location, length: newValue.length)

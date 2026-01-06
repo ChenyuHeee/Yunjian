@@ -2,7 +2,7 @@
 "app.title" = "云简";
 "app.menu.about" = "关于%@";
 "common.new" = "新建";
-"common.delete" = "删除";
+"view.typewriterMode" = "打字机模式";
 "common.save" = "保存";
 "common.cancel" = "取消";
 "common.ok" = "好";
@@ -119,6 +119,7 @@
 "view.prevTab" = "转到上一个标签";
 "view.nextTab" = "转到下一个标签";
 "view.highlightCurrentLine" = "改变当前行背景颜色";
+"view.typewriterMode" = "打字机模式";
 "view.darkMode" = "黑暗模式";
 "view.listStyle" = "列表样式";
 "view.listStyle.default" = "默认";

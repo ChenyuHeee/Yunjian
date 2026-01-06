@@ -9,11 +9,13 @@ struct MacTextView: NSViewRepresentable {
 
     var fontSize: CGFloat
     var highlightCurrentLine: Bool
+    var typewriterMode: Bool
 
     final class Coordinator: NSObject, NSTextViewDelegate {
         var parent: MacTextView
         var isProgrammaticChange = false
         private var lastHighlightedRange: NSRange?
+        private var pendingCenterWork: DispatchWorkItem?
 
         init(_ parent: MacTextView) {
             self.parent = parent
@@ -30,6 +32,7 @@ struct MacTextView: NSViewRepresentable {
             }
 
             updateCurrentLineHighlightIfNeeded(textView)
+            centerCaretIfNeeded(textView)
         }
 
         func textViewDidChangeSelection(_ notification: Notification) {
@@ -42,6 +45,61 @@ struct MacTextView: NSViewRepresentable {
             }
 
             updateCurrentLineHighlightIfNeeded(textView)
+            centerCaretIfNeeded(textView)
+        }
+
+        fileprivate func centerCaretIfNeeded(_ textView: NSTextView) {
+            guard parent.typewriterMode else { return }
+            guard !isProgrammaticChange else { return }
+            guard !textView.hasMarkedText() else { return }
+            guard let scrollView = textView.enclosingScrollView else { return }
+            guard let layoutManager = textView.layoutManager, textView.textContainer != nil else { return }
+
+            pendingCenterWork?.cancel()
+            let work = DispatchWorkItem { [weak self, weak textView, weak scrollView] in
+                guard let _ = self, let textView, let scrollView else { return }
+
+                let nsText = textView.string as NSString
+                guard nsText.length > 0 else { return }
+
+                let selectionLocation = textView.selectedRange().location
+                let safeLocation: Int
+                if selectionLocation == NSNotFound {
+                    safeLocation = 0
+                } else if selectionLocation >= nsText.length {
+                    safeLocation = max(0, nsText.length - 1)
+                } else {
+                    safeLocation = max(0, selectionLocation)
+                }
+
+                layoutManager.ensureLayout(forCharacterRange: NSRange(location: safeLocation, length: 0))
+
+                let glyphIndex = layoutManager.glyphIndexForCharacter(at: safeLocation)
+                var lineRect = layoutManager.lineFragmentRect(forGlyphAt: glyphIndex, effectiveRange: nil)
+                lineRect.origin.x += textView.textContainerOrigin.x
+                lineRect.origin.y += textView.textContainerOrigin.y
+
+                let visibleRect = scrollView.contentView.bounds
+                let documentHeight = textView.bounds.height
+                let visibleHeight = visibleRect.height
+                guard documentHeight > visibleHeight, visibleHeight > 0 else { return }
+
+                let lineMidY = lineRect.midY
+                let visibleMidY = visibleRect.midY
+                let targetOriginY = visibleRect.origin.y + (lineMidY - visibleMidY)
+
+                let maxOriginY = max(0, documentHeight - visibleHeight)
+                let clampedY = min(max(0, targetOriginY), maxOriginY)
+
+                let currentY = visibleRect.origin.y
+                guard abs(clampedY - currentY) > 0.5 else { return }
+
+                scrollView.contentView.setBoundsOrigin(NSPoint(x: visibleRect.origin.x, y: clampedY))
+                scrollView.reflectScrolledClipView(scrollView.contentView)
+            }
+
+            pendingCenterWork = work
+            DispatchQueue.main.async(execute: work)
         }
 
         func updateCurrentLineHighlightIfNeeded(_ textView: NSTextView) {
@@ -98,6 +156,7 @@ struct MacTextView: NSViewRepresentable {
         textView.setSelectedRange(selection)
 
         context.coordinator.updateCurrentLineHighlightIfNeeded(textView)
+        context.coordinator.centerCaretIfNeeded(textView)
 
         scrollView.documentView = textView
         return scrollView
@@ -130,6 +189,7 @@ struct MacTextView: NSViewRepresentable {
         }
 
         context.coordinator.updateCurrentLineHighlightIfNeeded(textView)
+        context.coordinator.centerCaretIfNeeded(textView)
     }
 }
 

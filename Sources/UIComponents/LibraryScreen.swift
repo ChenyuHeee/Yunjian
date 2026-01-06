@@ -80,12 +80,12 @@ public struct LibraryScreen: View {
                 Group {
                     switch root.editorPresentation {
                     case .editor:
-                        EditorScreen(viewModel: editorVM, fontDelta: root.editorFontDelta, highlightCurrentLine: root.highlightCurrentLine)
+                        EditorScreen(viewModel: editorVM, fontDelta: root.editorFontDelta, highlightCurrentLine: root.highlightCurrentLine, typewriterMode: root.isTypewriterMode)
                     case .preview:
                         MarkdownPreview(editor: editorVM)
                     case .split:
                         HStack(spacing: 0) {
-                            EditorScreen(viewModel: editorVM, fontDelta: root.editorFontDelta, highlightCurrentLine: root.highlightCurrentLine)
+                            EditorScreen(viewModel: editorVM, fontDelta: root.editorFontDelta, highlightCurrentLine: root.highlightCurrentLine, typewriterMode: root.isTypewriterMode)
                                 .frame(maxWidth: .infinity, maxHeight: .infinity)
                             Divider()
                             MarkdownPreview(editor: editorVM)

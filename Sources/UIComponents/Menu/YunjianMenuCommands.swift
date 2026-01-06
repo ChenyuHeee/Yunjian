@@ -215,6 +215,9 @@ public struct YunjianMenuCommands: Commands {
             Button(L10n.text("view.highlightCurrentLine")) { root.toggleHighlightCurrentLine() }
 
             Divider()
+            Button(L10n.text("view.typewriterMode")) { root.toggleTypewriterMode() }
+
+            Divider()
             Button(L10n.text("view.darkMode")) { root.toggleDarkMode() }
                 .keyboardShortcut("l", modifiers: [.command, .option])
 

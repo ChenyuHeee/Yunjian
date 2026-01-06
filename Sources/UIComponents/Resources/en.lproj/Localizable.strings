@@ -119,6 +119,7 @@
 "view.prevTab" = "Previous Tab";
 "view.nextTab" = "Next Tab";
 "view.highlightCurrentLine" = "Highlight Current Line";
+"view.typewriterMode" = "Typewriter Mode";
 "view.darkMode" = "Dark Mode";
 "view.listStyle" = "List Style";
 "view.listStyle.default" = "Default";
