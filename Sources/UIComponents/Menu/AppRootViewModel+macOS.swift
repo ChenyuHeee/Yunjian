@@ -538,6 +538,43 @@ extension AppRootViewModel {
                 trimForStructureChecks(trimmed) == "$$"
             }
 
+            func isHeadingLine(_ trimmed: String) -> Bool {
+                // ATX headings: #, ##, ... ######
+                var hashes = 0
+                for ch in trimmed {
+                    if ch == "#" { hashes += 1; continue }
+                    break
+                }
+                if hashes == 0 || hashes > 6 { return false }
+                let idx = trimmed.index(trimmed.startIndex, offsetBy: hashes)
+                return idx < trimmed.endIndex && trimmed[idx] == " "
+            }
+
+            func isBlockQuoteLine(_ trimmed: String) -> Bool {
+                trimmed.hasPrefix(">")
+            }
+
+            func isHorizontalRuleLine(_ trimmed: String) -> Bool {
+                // Markdown HR: at least 3 of '-', '*', '_' with optional spaces.
+                let compact = trimmed.replacingOccurrences(of: " ", with: "")
+                guard compact.count >= 3 else { return false }
+                guard let first = compact.first else { return false }
+                if first != "-" && first != "*" && first != "_" { return false }
+                for ch in compact {
+                    if ch != first { return false }
+                }
+                return true
+            }
+
+            func isTableRowLine(_ trimmed: String) -> Bool {
+                // Conservative: treat any pipe-containing line as table-ish.
+                // This avoids inserting blank lines inside Markdown tables.
+                if !trimmed.contains("|") { return false }
+                if isFenceDelimiter(trimmed) != nil { return false }
+                if isMathBlockDelimiter(trimmed) { return false }
+                return true
+            }
+
             func isListItemStart(_ trimmed: String) -> Bool {
                 // Conservative: treat all Markdown list starters as "list block".
                 // - unordered: -, +, *
@@ -569,6 +606,10 @@ extension AppRootViewModel {
             func isPlainParagraphLine(_ trimmed: String) -> Bool {
                 if trimmed.isEmpty { return false }
                 if isListItemStart(trimmed) { return false }
+                if isBlockQuoteLine(trimmed) { return false }
+                if isHeadingLine(trimmed) { return false }
+                if isHorizontalRuleLine(trimmed) { return false }
+                if isTableRowLine(trimmed) { return false }
                 if isFenceDelimiter(trimmed) != nil { return false }
                 if isMathBlockDelimiter(trimmed) { return false }
                 return true
@@ -578,6 +619,8 @@ extension AppRootViewModel {
             var activeFence: String? = nil
             var inMathBlock = false
             var inListBlock = false
+            var inQuoteBlock = false
+            var inTableBlock = false
 
             let output = NSMutableString()
             var cursor = 0
@@ -637,8 +680,14 @@ extension AppRootViewModel {
 
                 if trimmed.isEmpty {
                     inListBlock = false
+                    inQuoteBlock = false
+                    inTableBlock = false
                 } else if !inListBlock, isListItemStart(trimmed) {
                     inListBlock = true
+                } else if !inQuoteBlock, isBlockQuoteLine(trimmed) {
+                    inQuoteBlock = true
+                } else if !inTableBlock, isTableRowLine(trimmed) {
+                    inTableBlock = true
                 }
 
                 // Decide whether to insert an extra '\n' after this newline.
@@ -651,6 +700,8 @@ extension AppRootViewModel {
                             !inCodeFence &&
                             !inMathBlock &&
                             !inListBlock &&
+                            !inQuoteBlock &&
+                            !inTableBlock &&
                             isPlainParagraphLine(trimmed) &&
                             isPlainParagraphLine(nextTrimmed)
 
