@@ -4,6 +4,9 @@
 
 - `v1-doc-fold.svg`：折角文档（最“写作/文档”直觉）
 - `v2-cloud-doc.svg`：云 + 文档（对应“云简”含义）
+- `v2a-cloud-doc-balanced.svg`：v2 变体（更均衡、文档更清晰）
+- `v2b-cloud-doc-geometric.svg`：v2 变体（更几何、识别度强）
+- `v2c-cloud-doc-front.svg`：v2 变体（文档在前、层次更明显）
 - `v3-y-monogram.svg`：Y 字母单线（更偏品牌/极简）
 - `v4-pen-nib.svg`：笔尖（表达写作/编辑）
 - `v5-lines.svg`：三行文本（表达“简洁记录”）

@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="1024" viewBox="0 0 1024 1024">
+  <g fill="none" stroke="#000" stroke-width="64" stroke-linecap="round" stroke-linejoin="round">
+    <rect x="112" y="112" width="800" height="800" rx="176"/>
+
+    <!-- Cloud: geometric construction (circles + base) -->
+    <circle cx="392" cy="520" r="92"/>
+    <circle cx="512" cy="468" r="120"/>
+    <circle cx="652" cy="520" r="96"/>
+    <path d="M292 612H732"/>
+
+    <!-- Document: compact -->
+    <path d="M452 540H596L664 608V740H452Z"/>
+    <path d="M596 540V608H664"/>
+  </g>
+</svg>

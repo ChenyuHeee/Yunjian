@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="1024" viewBox="0 0 1024 1024">
+  <g fill="none" stroke="#000" stroke-width="64" stroke-linecap="round" stroke-linejoin="round">
+    <rect x="112" y="112" width="800" height="800" rx="176"/>
+
+    <!-- Cloud: smoother + slightly higher -->
+    <path d="M320 612
+             C268 612 224 568 224 516
+             C224 468 258 428 306 418
+             C328 344 395 292 476 292
+             C548 292 610 334 640 400
+             C652 396 666 394 680 394
+             C734 394 778 438 778 492
+             C778 546 734 590 680 590
+             H320Z"/>
+
+    <!-- Document: larger + clearer fold -->
+    <path d="M424 520H600L684 604V764H424Z"/>
+    <path d="M600 520V604H684"/>
+
+    <path d="M464 652H640"/>
+    <path d="M464 716H604"/>
+  </g>
+</svg>

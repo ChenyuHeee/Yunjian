@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="1024" viewBox="0 0 1024 1024">
+  <g fill="none" stroke="#000" stroke-width="64" stroke-linecap="round" stroke-linejoin="round">
+    <rect x="112" y="112" width="800" height="800" rx="176"/>
+
+    <!-- Cloud sits behind the document -->
+    <path d="M332 632
+             C276 632 230 586 230 530
+             C230 480 266 438 318 428
+             C342 346 414 288 500 288
+             C578 288 646 334 678 406
+             C692 402 708 400 724 400
+             C782 400 830 448 830 506
+             C830 564 782 612 724 612
+             H332Z"/>
+
+    <!-- Document in front (slightly lower) -->
+    <path d="M404 532H604L716 644V796H404Z"/>
+    <path d="M604 532V644H716"/>
+
+    <path d="M452 692H656"/>
+  </g>
+</svg>
