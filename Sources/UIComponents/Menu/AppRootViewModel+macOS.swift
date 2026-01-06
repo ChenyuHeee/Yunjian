@@ -524,25 +524,146 @@ extension AppRootViewModel {
             let selectionLocation = max(0, min(editor.selection.location, length))
             var insertedBeforeSelection = 0
 
-            let output = NSMutableString()
-            var lastCopiedIndex = 0
-
-            for i in 0..<length {
-                if source.character(at: i) != 10 { continue } // '\n'
-
-                output.append(source.substring(with: NSRange(location: lastCopiedIndex, length: i - lastCopiedIndex + 1)))
-
-                let nextIsNewline = (i + 1 < length) && (source.character(at: i + 1) == 10)
-                if !nextIsNewline {
-                    output.append("\n")
-                    if i < selectionLocation { insertedBeforeSelection += 1 }
-                }
-
-                lastCopiedIndex = i + 1
+            func trimForStructureChecks(_ s: String) -> String {
+                s.trimmingCharacters(in: .whitespacesAndNewlines)
             }
 
-            if lastCopiedIndex < length {
-                output.append(source.substring(with: NSRange(location: lastCopiedIndex, length: length - lastCopiedIndex)))
+            func isFenceDelimiter(_ trimmed: String) -> String? {
+                if trimmed.hasPrefix("```") { return "```" }
+                if trimmed.hasPrefix("~~~") { return "~~~" }
+                return nil
+            }
+
+            func isMathBlockDelimiter(_ trimmed: String) -> Bool {
+                trimForStructureChecks(trimmed) == "$$"
+            }
+
+            func isListItemStart(_ trimmed: String) -> Bool {
+                // Conservative: treat all Markdown list starters as "list block".
+                // - unordered: -, +, *
+                // - ordered: 1. / 1)
+                // - task: - [ ] / - [x]
+                let t = trimmed
+                if t.hasPrefix("- [ ") || t.hasPrefix("- [x]") || t.hasPrefix("- [X]") { return true }
+                if t.hasPrefix("* [ ") || t.hasPrefix("* [x]") || t.hasPrefix("* [X]") { return true }
+                if t.hasPrefix("+ [ ") || t.hasPrefix("+ [x]") || t.hasPrefix("+ [X]") { return true }
+                if t.hasPrefix("- ") || t.hasPrefix("* ") || t.hasPrefix("+ ") { return true }
+
+                // Ordered list: starts with digits then '.' or ')'
+                var digitsCount = 0
+                for ch in t {
+                    if ch >= "0" && ch <= "9" { digitsCount += 1; continue }
+                    break
+                }
+                if digitsCount > 0 {
+                    let idx = t.index(t.startIndex, offsetBy: digitsCount)
+                    if idx < t.endIndex {
+                        let rest = t[idx...]
+                        if rest.hasPrefix(". ") || rest.hasPrefix(") ") { return true }
+                    }
+                }
+
+                return false
+            }
+
+            func isPlainParagraphLine(_ trimmed: String) -> Bool {
+                if trimmed.isEmpty { return false }
+                if isListItemStart(trimmed) { return false }
+                if isFenceDelimiter(trimmed) != nil { return false }
+                if isMathBlockDelimiter(trimmed) { return false }
+                return true
+            }
+
+            var inCodeFence = false
+            var activeFence: String? = nil
+            var inMathBlock = false
+            var inListBlock = false
+
+            let output = NSMutableString()
+            var cursor = 0
+            var lineIndex = 0
+
+            while cursor < length {
+                let lineStart = cursor
+                var lineEnd = cursor
+                var hasNewline = false
+
+                while lineEnd < length {
+                    let c = source.character(at: lineEnd)
+                    if c == 10 {
+                        hasNewline = true
+                        break
+                    }
+                    lineEnd += 1
+                }
+
+                let contentRange = NSRange(location: lineStart, length: lineEnd - lineStart)
+                let rawLine = source.substring(with: contentRange)
+                let trimmed = trimForStructureChecks(rawLine)
+
+                // Peek next line trimmed (for deciding whether to insert a blank line).
+                var nextTrimmed = ""
+                if hasNewline {
+                    let nextStart = min(lineEnd + 1, length)
+                    if nextStart < length {
+                        var nextEnd = nextStart
+                        while nextEnd < length, source.character(at: nextEnd) != 10 { nextEnd += 1 }
+                        let nextRaw = source.substring(with: NSRange(location: nextStart, length: nextEnd - nextStart))
+                        nextTrimmed = trimForStructureChecks(nextRaw)
+                    }
+                }
+
+                // Append this line (including its existing newline, if any).
+                if hasNewline {
+                    output.append(source.substring(with: NSRange(location: lineStart, length: (lineEnd - lineStart) + 1)))
+                } else {
+                    output.append(source.substring(with: NSRange(location: lineStart, length: lineEnd - lineStart)))
+                }
+
+                // Update structural states based on the current line.
+                if let fence = isFenceDelimiter(trimmed) {
+                    if !inCodeFence {
+                        inCodeFence = true
+                        activeFence = fence
+                    } else if activeFence == fence {
+                        inCodeFence = false
+                        activeFence = nil
+                    }
+                }
+
+                if isMathBlockDelimiter(trimmed) {
+                    inMathBlock.toggle()
+                }
+
+                if trimmed.isEmpty {
+                    inListBlock = false
+                } else if !inListBlock, isListItemStart(trimmed) {
+                    inListBlock = true
+                }
+
+                // Decide whether to insert an extra '\n' after this newline.
+                if hasNewline {
+                    let newlineIndex = lineEnd
+                    let nextIsNewline = (lineEnd + 1 < length) && (source.character(at: lineEnd + 1) == 10)
+
+                    if !nextIsNewline {
+                        let shouldInsert =
+                            !inCodeFence &&
+                            !inMathBlock &&
+                            !inListBlock &&
+                            isPlainParagraphLine(trimmed) &&
+                            isPlainParagraphLine(nextTrimmed)
+
+                        if shouldInsert {
+                            output.append("\n")
+                            if newlineIndex < selectionLocation { insertedBeforeSelection += 1 }
+                        }
+                    }
+                }
+
+                cursor = hasNewline ? (lineEnd + 1) : lineEnd
+                lineIndex += 1
+                _ = lineIndex // keep variables tidy; helpful for debugging if needed
             }
 
             let newBody = output as String
