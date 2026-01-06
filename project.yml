@@ -11,8 +11,8 @@ targets:
     platform: iOS
     settings:
       GENERATE_INFOPLIST_FILE: YES
-      MARKETING_VERSION: 0.1.1
-      CURRENT_PROJECT_VERSION: 2
+      MARKETING_VERSION: 0.1.4
+      CURRENT_PROJECT_VERSION: 4
     sources:
       - path: Apps/YunjianApp
     dependencies:
@@ -34,8 +34,8 @@ targets:
       GENERATE_INFOPLIST_FILE: NO
       INFOPLIST_FILE: Apps/YunjianApp/Info-macOS.plist
       PRODUCT_NAME: 云简
-      MARKETING_VERSION: 0.1.1
-      CURRENT_PROJECT_VERSION: 2
+      MARKETING_VERSION: 0.1.4
+      CURRENT_PROJECT_VERSION: 4
     sources:
       - path: Apps/YunjianApp
     dependencies:

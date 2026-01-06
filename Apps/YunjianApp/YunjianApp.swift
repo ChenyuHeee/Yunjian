@@ -47,23 +47,60 @@ final class YunjianAppDelegate: NSObject, NSApplicationDelegate {
     func applicationDidFinishLaunching(_ notification: Notification) {
         NSApp.setActivationPolicy(.regular)
         debugLog("didFinishLaunching")
+        openFilesFromStartupArgumentsIfAny()
         bringMainWindowToFront(retryCount: 10)
         flushPendingOpenFilesIfNeeded()
     }
 
+    // Some LaunchServices paths provide files via argv (instead of open/openFile callbacks).
+    private func openFilesFromStartupArgumentsIfAny() {
+        let args = ProcessInfo.processInfo.arguments
+        guard args.count > 1 else { return }
+
+        var urls: [URL] = []
+        urls.reserveCapacity(min(4, args.count - 1))
+
+        for arg in args.dropFirst() {
+            // Finder launch adds -psn_*; ignore any flags.
+            if arg.hasPrefix("-") { continue }
+
+            let url = URL(fileURLWithPath: arg)
+            guard url.isFileURL else { continue }
+            guard FileManager.default.fileExists(atPath: url.path) else { continue }
+            urls.append(url)
+        }
+
+        guard !urls.isEmpty else { return }
+        debugLog("startupArgsFiles(count: \(urls.count))")
+        for url in urls {
+            openFileURL(url)
+        }
+    }
+
     func application(_ application: NSApplication, openFile filename: String) -> Bool {
+        debugLog("openFile(\(filename))")
         openFileURL(URL(fileURLWithPath: filename))
         return true
     }
 
     func application(_ application: NSApplication, openFiles filenames: [String]) {
+        debugLog("openFiles(count: \(filenames.count))")
         for filename in filenames {
             openFileURL(URL(fileURLWithPath: filename))
         }
         application.reply(toOpenOrPrint: .success)
     }
 
+    // Newer delegate API (Finder / LaunchServices may use this instead of openFile/openFiles).
+    func application(_ application: NSApplication, open urls: [URL]) {
+        debugLog("open(urls: \(urls.count))")
+        for url in urls {
+            openFileURL(url)
+        }
+    }
+
     private func openFileURL(_ url: URL) {
+        debugLog("openFileURL(\(url.path)) isFileURL=\(url.isFileURL)")
         Task { @MainActor in
             YunjianAppShared.openOrEnqueueFileURL(url)
             // Make sure the window becomes visible when opening from Finder.
@@ -410,6 +447,11 @@ struct YunjianApp: App {
     var body: some Scene {
         WindowGroup {
             LibraryScreen(root: root)
+                .onOpenURL { url in
+                    Task { @MainActor in
+                        YunjianAppShared.openOrEnqueueFileURL(url)
+                    }
+                }
         }
         .commands {
             YunjianMenuCommands(root: root)

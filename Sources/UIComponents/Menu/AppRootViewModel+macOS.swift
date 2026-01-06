@@ -107,8 +107,26 @@ extension AppRootViewModel {
     }
 
     public func openFile(url: URL) async {
+        let didStartSecurityScoped = url.startAccessingSecurityScopedResource()
+        defer {
+            if didStartSecurityScoped {
+                url.stopAccessingSecurityScopedResource()
+            }
+        }
+
         do {
-            let body = try String(contentsOf: url, encoding: .utf8)
+            let body: String
+
+            // Prefer UTF-8, but fall back to auto-detection and finally a lossy UTF-8 decode.
+            if let s = try? String(contentsOf: url, encoding: .utf8) {
+                body = s
+            } else if let s = try? String(contentsOf: url) {
+                body = s
+            } else {
+                let data = try Data(contentsOf: url)
+                body = String(decoding: data, as: UTF8.self)
+            }
+
             let title = url.deletingPathExtension().lastPathComponent
             let doc = YunjianCore.Document(title: title, body: body, fileURL: url)
             try? await storage.upsertDocument(doc)
@@ -116,7 +134,11 @@ extension AppRootViewModel {
             await openDocument(id: doc.id)
             noteRecentFile(url)
         } catch {
-            // 简化：忽略错误（后续可加 toast/alert）
+            let alert = NSAlert()
+            alert.messageText = "无法打开文件"
+            alert.informativeText = "\(url.path)\n\n\(error.localizedDescription)"
+            alert.addButton(withTitle: "好")
+            alert.runModal()
         }
     }
 
